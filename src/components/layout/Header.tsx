@@ -14,7 +14,7 @@ type NavItem = {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Accueil", href: "/" },
-  { label: "À propos", href: "/a-propos" },
+  { label: "À propos", href: "#about" },
   { label: "Services", href: "/services" },
   { label: "Agents", href: "/agents" },
   { label: "Contact", href: "/contact" },
@@ -25,6 +25,7 @@ export default function Header() {
 
   const isActive = (href: string): boolean => {
     if (href === "/") return pathname === "/";
+    if (href.startsWith("#")) return false; // anchors are not route-based
     return pathname?.startsWith(href) ?? false;
   };
 
