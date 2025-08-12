@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 export default function AboutSection() {
   return (
-    <section id="about" aria-label="À propos" className="relative py-16 md:py-24 lg:py-28 scroll-mt-24 md:scroll-mt-28">
+    <section id="about" aria-label="À propos" className="relative py-16 md:py-24 lg:py-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-2 gap-0 md:gap-2 lg:gap-4 items-center">
           {/* Image block with framed accent */}

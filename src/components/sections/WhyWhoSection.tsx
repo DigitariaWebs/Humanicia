@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export default function WhyWhoSection() {
   return (
-    <section className="relative pt-16 md:pt-20 lg:pt-24 pb-40 md:pb-52 lg:pb-64 overflow-hidden">
+    <section className="relative pt-16 md:pt-20 lg:pt-24 pb-32 md:pb-36 lg:pb-40 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Decorative dashed arcs */}
         <motion.svg
@@ -123,6 +123,7 @@ export default function WhyWhoSection() {
           </motion.div>
         </div>
       </div>
+      
     </section>
   );
 }
