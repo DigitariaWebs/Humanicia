@@ -14,23 +14,23 @@ type Service = {
 const SERVICES: Service[] = [
   {
     id: "audio",
-    title: "Service",
-    subtitle: "Appels vocaux",
-    imageSrc: "/heroSection/BlackGirl.png",
+    title: "Appels vocaux",
+    subtitle: "Discutez en toute simplicité, où que vous soyez",
+    imageSrc: "/ServiceSection/AppelsVocaux.jpg",
     rotationDeg: -6,
   },
   {
     id: "visio",
-    title: "Service",
-    subtitle: "Appels visio",
-    imageSrc: "/heroSection/ChineseGirl.png",
+    title: "Appels visio",
+    subtitle: "Partagez un moment en face à face, à distance",
+    imageSrc: "/ServiceSection/AppelVisio.jpg",
     rotationDeg: 0,
   },
   {
     id: "presence",
-    title: "Service",
-    subtitle: "Activités en présence",
-    imageSrc: "/heroSection/RedHeadGirl.png",
+    title: "Activités en présence",
+    subtitle: "Des moments authentiques, vécus ensemble",
+    imageSrc: "/ServiceSection/ActivitesPresence.jpg",
     rotationDeg: 6,
   },
 ];

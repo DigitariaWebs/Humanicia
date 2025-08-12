@@ -49,13 +49,22 @@ export default function Header() {
                 <li key={item.href}>
                   <MotionLink
                     href={item.href}
-                    className={["text-base transition-colors", isActive(item.href) ? "font-semibold" : ""].join(" ")}
+                    className={[
+                      "text-base rounded-md px-2 py-1 transition-colors",
+                      isActive(item.href) ? "font-semibold" : "",
+                    ].join(" ")}
                     style={{
                       color: isActive(item.href)
                         ? "var(--color-brand)"
                         : "color-mix(in oklab, var(--color-brand) 60%, white)",
+                      backgroundColor: "transparent",
                     }}
-                    whileHover={{ y: -2 }}
+                    whileHover={{
+                      y: -2,
+                      color: "var(--color-cta)",
+                      backgroundColor:
+                        "color-mix(in oklab, var(--color-cta) 14%, white)",
+                    }}
                     transition={{ type: "spring", stiffness: 300, damping: 18 }}
                   >
                     {item.label}
