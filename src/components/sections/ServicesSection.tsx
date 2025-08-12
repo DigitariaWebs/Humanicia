@@ -37,7 +37,7 @@ const SERVICES: Service[] = [
 
 export default function ServicesSection() {
   return (
-    <section className="relative pt-2 md:pt-3 lg:pt-4 pb-24 md:pb-28 lg:pb-32">
+    <section id="services" aria-label="Nos services" className="relative pt-2 md:pt-3 lg:pt-4 pb-24 md:pb-28 lg:pb-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-16 md:mb-20">
           <p className="text-sm font-semibold" style={{ color: "var(--color-cta)" }}>

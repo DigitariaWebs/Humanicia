@@ -3,6 +3,7 @@ import HeroSection from "../components/sections/HeroSection";
 import AboutSection from "@/components/sections/AboutSection";
 import WhyWhoSection from "@/components/sections/WhyWhoSection";
 import ServicesSection from "@/components/sections/ServicesSection";
+import OurTeamSection from "@/components/sections/OurTeamSection";
 import Footer from "@/components/layout/Footer";
 import InfiniteSlider from "@/components/ui/InfiniteSlider";
 
@@ -17,6 +18,7 @@ export default function Home() {
         <InfiniteSlider />
       </section>
       <ServicesSection />
+      <OurTeamSection />
       <Footer />
     </main>
   );

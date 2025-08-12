@@ -1,0 +1,129 @@
+"use client";
+
+import Image from "next/image";
+import { motion } from "framer-motion";
+import React from "react";
+
+function Star({ filled = false }: { filled?: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="18"
+      height="18"
+      aria-hidden
+      className="inline-block"
+      style={{ color: filled ? "#F4B840" : "#E5E7EB" }}
+    >
+      <path
+        fill="currentColor"
+        d="M12 2.75l2.9 5.88 6.5.95-4.7 4.57 1.1 6.45L12 17.97 6.2 20.6l1.1-6.45-4.7-4.57 6.5-.95L12 2.75z"
+      />
+    </svg>
+  );
+}
+
+type Member = { id: string; src: string; alt: string };
+
+const MEMBERS: Member[] = [
+  { id: "wm", src: "/OurTeamSection/WhiteMan.jpg", alt: "Agent Humanicia" },
+  { id: "bg", src: "/OurTeamSection/BlondeGirl.jpg", alt: "Agent Humanicia" },
+  { id: "cg", src: "/OurTeamSection/ChineseGuy.jpg", alt: "Agent Humanicia" },
+];
+
+export default function OurTeamSection() {
+  const [activeIndex, setActiveIndex] = React.useState<number>(1); // center by default
+
+  const getSlot = (index: number): "left" | "center" | "right" => {
+    if (index === activeIndex) return "center";
+    const rightIndex = (activeIndex + 1) % MEMBERS.length;
+    return index === rightIndex ? "right" : "left";
+  };
+
+  const getMotionForSlot = (slot: "left" | "center" | "right") => {
+    // Positions tuned for mobile; media queries handled with relative values
+    switch (slot) {
+      case "left":
+        return { x: -120, y: 24, rotate: -8, zIndex: 10, scale: 0.96 };
+      case "right":
+        return { x: 120, y: 36, rotate: 6, zIndex: 10, scale: 0.96 };
+      default:
+        return { x: 0, y: 0, rotate: 3, zIndex: 30, scale: 1 };
+    }
+  };
+
+  const spring = { type: "spring" as const, stiffness: 320, damping: 26 };
+
+  return (
+    <section id="team" className="relative py-16 md:py-24 lg:py-28">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+          {/* Left content */}
+          <div>
+            <p className="text-sm font-semibold" style={{ color: "var(--color-cta)" }}>
+              Notre équipe
+            </p>
+            <h2
+              className="mt-2 text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight"
+              style={{ color: "var(--color-brand)" }}
+            >
+              Humanicia Agents
+            </h2>
+
+            <div className="mt-4 flex items-center gap-2">
+              <div className="flex items-center gap-1">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} filled={i < 4} />
+                ))}
+              </div>
+              <span className="text-sm" style={{ color: "var(--color-muted)" }}>4/5</span>
+            </div>
+
+            <div className="mt-5 text-[15px] md:text-base leading-relaxed text-justify" style={{ color: "var(--color-muted)" }}>
+              <p>
+                Chez Humanicia, chaque agent est bien plus qu’une voix ou un visage à l’écran. Ce sont des personnes passionnées
+                par l’échange humain, choisies pour leur écoute, leur bienveillance et leur authenticité. Chacun apporte sa
+                personnalité et ses centres d’intérêt, afin que chaque conversation soit unique et sincère.
+              </p>
+              <p className="mt-4">
+                Que vous cherchiez à discuter de voyages, à partager un souvenir ou à apprendre quelque chose de nouveau, nos
+                agents sont là pour vous offrir une présence chaleureuse, adaptée à vos envies.
+              </p>
+            </div>
+          </div>
+
+          {/* Right collage - interactive */}
+          <div className="relative h-[360px] md:h-[420px] lg:h-[460px] grid place-items-center">
+            {MEMBERS.map((member, index) => {
+              const slot = getSlot(index);
+              const pose = getMotionForSlot(slot);
+              const isCenter = slot === "center";
+              const widthClass = isCenter
+                ? "w-[220px] md:w-[260px] lg:w-[300px]"
+                : "w-[190px] md:w-[220px] lg:w-[240px]";
+              return (
+                <motion.button
+                  key={member.id}
+                  type="button"
+                  onClick={() => setActiveIndex(index)}
+                  className={`absolute aspect-[3/4] ${widthClass} rounded-xl overflow-hidden ring-1 ring-black/5 bg-white shadow-md focus:outline-none focus-visible:ring-2`}
+                  initial={pose}
+                  animate={pose}
+                  transition={spring}
+                  whileHover={{ scale: isCenter ? 1.03 : 1.05, y: pose.y - 4 }}
+                  whileTap={{ scale: 0.98 }}
+                  aria-label="Choisir cet agent"
+                  style={{ cursor: "pointer" }}
+                >
+                  <Image src={member.src} alt={member.alt} fill className="object-cover" sizes="(min-width: 1024px) 300px, (min-width: 768px) 260px, 220px" />
+                  <span className="sr-only">{member.alt}</span>
+                </motion.button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
