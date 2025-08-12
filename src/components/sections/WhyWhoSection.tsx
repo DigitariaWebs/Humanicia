@@ -77,14 +77,14 @@ export default function WhyWhoSection() {
               style={{ color: "var(--color-muted)" }}
             >
               <p>
-                Parce que la solitude n’épargne personne. Quelle soit choisie ou subie, elle
+                Parce que la solitude n’épargne personne. Qu’elle soit choisie ou subie, elle
                 peut parfois peser lourd sur le cœur. Un mot gentil, une écoute attentive ou un
                 moment partagé peuvent suffire à alléger ce fardeau.
               </p>
               <p className="mt-4">
-                Humanicia est née de cette conviction: offrir une présence humaine, bienveillante
-                et authentique, à travers des échanges simples mais profonds. Ici, pas de faux-
-                semblants — juste du lien, du vrai.
+                Humanicia est né de cette conviction : offrir une présence humaine, bienveillante
+                et authentique, à travers des échanges simples mais profonds. Ici, pas de faux-semblants —
+                juste du lien, du vrai.
               </p>
             </div>
           </motion.div>
@@ -111,11 +111,9 @@ export default function WhyWhoSection() {
               style={{ color: "var(--color-muted)" }}
             >
               <p>
-                Humanicia s’adresse à toutes celles et ceux qui ressentent le besoin d’un
-                moment d’écoute et de partage: aux personnes âgées, aux personnes isolées par
-                la distance ou les circonstances, à celles et ceux qui traversent un moment
-                difficile ou qui ont simplement envie de parler avec quelqu’un qui prend
-                vraiment le temps d’écouter.
+                Humanicia s’adresse à toutes celles et ceux qui ressentent le besoin d’un moment d’écoute et de partage. Aux personnes
+                âgées en quête de chaleur humaine, aux personnes isolées par la distance ou les circonstances, à celles qui traversent un
+                moment difficile ou simplement à ceux qui ont envie de parler avec quelqu’un qui prend vraiment le temps d’écouter.
               </p>
               <p className="mt-4">
                 Que vous soyez chez vous, en voyage ou dans un café, Humanicia est là pour

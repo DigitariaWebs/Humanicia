@@ -43,7 +43,7 @@ export default function AboutSection() {
             className="relative"
           >
             <p className="text-sm font-semibold tracking-wide">
-              <span style={{ color: "var(--color-brand)" }}>Humancia</span>
+              <span style={{ color: "var(--color-cta)" }}>Humancia</span>
             </p>
             <h2
               className="mt-2 text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight"
@@ -54,7 +54,7 @@ export default function AboutSection() {
 
             <div className="mt-4 space-y-3 text-[15px] md:text-base leading-relaxed text-justify" style={{ color: "var(--color-muted)" }}>
               <p>
-                Je m’appelle <span className="font-semibold" style={{ color: "var(--color-brand)" }}>Éric Thomas</span>. Après avoir parcouru 1 250 km en
+                Je m’appelle <span className="font-semibold" style={{ color: "var(--color-cta)" }}>Éric Thomas</span>. Après avoir parcouru 1 250 km en
                 solitaire sur le Chemin de Compostelle, j’ai compris à quel point la solitude peut être à la fois belle… et lourde à porter.
                 Cette expérience m’a inspiré à créer Humancia, un service qui reconnecte les gens entre eux, à travers des conversations
                 authentiques, des appels vidéo et des rencontres réelles.

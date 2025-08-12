@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import type { CSSProperties } from "react";
 
 export default function HeroSection() {
   const images = [
@@ -100,9 +101,7 @@ export default function HeroSection() {
           viewport={{ once: true, margin: "-20% 0px -20% 0px" }}
           transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
         >
-          Nous croyons qu’un échange sincère peut illuminer une journée et réchauffer le cœur. Que ce soit par un appel vocal anonyme, une
-          visioconférence conviviale ou une rencontre en personne autour d’un café ou d’une balade, nous créons des instants authentiques
-          pour partager, écouter et se sentir véritablement connecté.
+          Nous croyons qu’un échange sincère peut illuminer une journée et réchauffer le cœur. Que ce soit par un appel vocal anonyme, une visioconférence conviviale ou une rencontre en personne autour d’un café ou d’une balade, nous créons des instants authentiques pour partager, écouter et se sentir véritablement connecté.
         </motion.p>
       </div>
 
@@ -115,12 +114,14 @@ export default function HeroSection() {
               <motion.div
                 key={`left-col-${colIdx}`}
                 className={`flex flex-col gap-4 md:gap-5 ${col.length === 1 ? 'h-[23rem] md:h-[29.25rem] justify-center' : ''} ${colIdx % 2 === 0 ? 'motion-up' : 'motion-down'}`}
-                style={{
-                  // Staggered durations and delays per column
-                  // col 0: slower, col 1: medium, col 2: faster (and with unique delays)
-                  ["--motion-duration" as any]: colIdx === 0 ? "9s" : colIdx === 1 ? "7.5s" : "6s",
-                  ["--motion-delay" as any]: colIdx === 0 ? "0.2s" : colIdx === 1 ? "0.8s" : "1.4s",
-                }}
+                style={
+                  {
+                    // Staggered durations and delays per column
+                    // col 0: slower, col 1: medium, col 2: faster (and with unique delays)
+                    "--motion-duration": colIdx === 0 ? "9s" : colIdx === 1 ? "7.5s" : "6s",
+                    "--motion-delay": colIdx === 0 ? "0.2s" : colIdx === 1 ? "0.8s" : "1.4s",
+                  } as CSSProperties & Record<"--motion-duration" | "--motion-delay", string>
+                }
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
@@ -154,10 +155,12 @@ export default function HeroSection() {
               <motion.div
                 key={`right-col-${colIdx}`}
                 className={`flex flex-col gap-4 md:gap-5 ${col.length === 1 ? 'h-[23rem] md:h-[29.25rem] justify-center' : ''} ${colIdx % 2 === 0 ? 'motion-up' : 'motion-down'}`}
-                style={{
-                  ["--motion-duration" as any]: colIdx === 0 ? "8.5s" : colIdx === 1 ? "7s" : "6.25s",
-                  ["--motion-delay" as any]: colIdx === 0 ? "0.5s" : colIdx === 1 ? "0.1s" : "1.1s",
-                }}
+                style={
+                  {
+                    "--motion-duration": colIdx === 0 ? "8.5s" : colIdx === 1 ? "7s" : "6.25s",
+                    "--motion-delay": colIdx === 0 ? "0.5s" : colIdx === 1 ? "0.1s" : "1.1s",
+                  } as CSSProperties & Record<"--motion-duration" | "--motion-delay", string>
+                }
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
