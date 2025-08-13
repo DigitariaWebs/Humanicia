@@ -11,7 +11,7 @@ export default function AboutSection() {
           {/* Image block with framed accent */}
           <div className="relative w-full md:max-w-[420px] lg:max-w-[460px] justify-self-center md:justify-self-start">
             {/* Accent rounded frame behind the image */}
-            <div className="absolute -inset-4 rounded-[2.5rem] border-[10px] opacity-60"
+            <div className="absolute -inset-4 rounded-[3.5rem] border-[10px] opacity-60"
                  style={{ borderColor: "var(--color-clay)" }}
                  aria-hidden="true"
             />

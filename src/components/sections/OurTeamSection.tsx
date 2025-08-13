@@ -78,7 +78,7 @@ export default function OurTeamSection() {
               <span className="text-sm" style={{ color: "var(--color-muted)" }}>4/5</span>
             </div>
 
-            <div className="mt-5 text-[15px] md:text-base leading-relaxed text-justify" style={{ color: "var(--color-muted)" }}>
+            <div className="mt-6 text-base md:text-lg leading-relaxed text-justify" style={{ color: "var(--color-text)" }}>
               <p>
                 Chez Humanicia, chaque agent est bien plus qu’une voix ou un visage à l’écran. Ce sont des personnes passionnées
                 par l’échange humain, choisies pour leur écoute, leur bienveillance et leur authenticité. Chacun apporte sa
@@ -120,6 +120,42 @@ export default function OurTeamSection() {
               );
             })}
           </div>
+        </div>
+
+        {/* Banner heading */}
+        <div
+          className="mt-16 md:mt-20 lg:mt-24 rounded-2xl px-4 py-10 md:py-14 text-center"
+          style={{ backgroundColor: "var(--color-mint)" }}
+        >
+          <h3
+            className="font-extrabold leading-snug text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white"
+          >
+            <span
+              className="rounded inline-block px-3 py-1"
+              style={{
+                background: "rgba(166, 193, 142, 0.9)",
+                WebkitBoxDecorationBreak: "clone",
+                boxDecorationBreak: "clone",
+              }}
+            >
+              La Meilleure Compagnie Pour
+            </span>
+            <br />
+            <span
+              className="rounded inline-block px-3 py-1"
+              style={{
+                background: "rgba(166, 193, 142, 0.9)",
+                WebkitBoxDecorationBreak: "clone",
+                boxDecorationBreak: "clone",
+              }}
+            >
+              Vos Moments De Solitude
+            </span>
+          </h3>
+          <p className="mt-6 text-sm sm:text-base md:text-lg font-medium max-w-3xl mx-auto" style={{ color: "var(--color-text)" }}>
+            Parce que chacun mérite une oreille attentive et une présence bienveillante, Humanicia vous accompagne dans les
+            instants où le lien humain fait toute la différence.
+          </p>
         </div>
       </div>
     </section>

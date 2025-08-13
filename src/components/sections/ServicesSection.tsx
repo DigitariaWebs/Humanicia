@@ -61,14 +61,14 @@ export default function ServicesSection() {
               transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.05 }}
               whileHover={{ y: -8, rotate: service.rotationDeg * 0.8, scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="group relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-sm ring-1 ring-black/5 transition-shadow duration-300 hover:shadow-lg"
+              className="group relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-sm ring-1 ring-black/5 transition-shadow duration-300 hover:shadow-lg cursor-pointer"
               style={{ transformOrigin: "center" }}
             >
               <Image
                 src={service.imageSrc}
                 alt={`${service.title} - ${service.subtitle}`}
                 fill
-                className="object-cover transition-transform duration-300 will-change-transform group-hover:scale-105"
+                className="object-cover transition-transform duration-300 will-change-transform"
                 sizes="(min-width: 1024px) 28rem, (min-width: 768px) 30vw, 88vw"
                 priority={index === 0}
               />
