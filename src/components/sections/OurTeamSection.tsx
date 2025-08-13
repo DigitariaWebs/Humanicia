@@ -54,7 +54,7 @@ export default function OurTeamSection() {
   const spring = { type: "spring" as const, stiffness: 320, damping: 26 };
 
   return (
-    <section id="team" className="relative py-16 md:py-24 lg:py-28">
+    <section id="agents" className="relative py-16 md:py-24 lg:py-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
           {/* Left content */}

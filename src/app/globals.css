@@ -44,9 +44,11 @@ body {
 }
 
 /* Offset anchor scrolling to account for sticky header height */
-:target {
-  scroll-margin-top: -5rem;
-  /* ~128px; gives a bit more space above section */
+/* Using positive scroll-margin-top so anchored sections aren't hidden under sticky header */
+section[id],
+[id] {
+  scroll-margin-top: 6rem;
+  /* header height (~5rem) + spacing */
 }
 /* Infinite horizontal slider */
 @keyframes infinite-scroll-x {
