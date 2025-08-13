@@ -22,12 +22,30 @@ function Star({ filled = false }: { filled?: boolean }) {
   );
 }
 
-type Member = { id: string; src: string; alt: string };
+type Member = { id: string; src: string; alt: string; name: string; bio: string };
 
 const MEMBERS: Member[] = [
-  { id: "wm", src: "/OurTeamSection/WhiteMan.jpg", alt: "Agent Humanicia" },
-  { id: "bg", src: "/OurTeamSection/BlondeGirl.jpg", alt: "Agent Humanicia" },
-  { id: "cg", src: "/OurTeamSection/ChineseGuy.jpg", alt: "Agent Humanicia" },
+  {
+    id: "wm",
+    src: "/OurTeamSection/WhiteMan.jpg",
+    alt: "Photo de Jean, agent Humanicia",
+    name: "Jean",
+    bio: "Passionné de randonnées et de jazz, Jean aime écouter et échanger calmement pour apaiser les esprits.",
+  },
+  {
+    id: "bg",
+    src: "/OurTeamSection/BlondeGirl.jpg",
+    alt: "Photo de Clara, agente Humanicia",
+    name: "Clara",
+    bio: "Souriante et empathique, Clara adore parler de voyages, de cuisine et des petites joies du quotidien.",
+  },
+  {
+    id: "cg",
+    src: "/OurTeamSection/ChineseGuy.jpg",
+    alt: "Photo de Minh, agent Humanicia",
+    name: "Minh",
+    bio: "Curieux et bienveillant, Minh trouve toujours les mots pour rendre une conversation plus légère.",
+  },
 ];
 
 export default function OurTeamSection() {
@@ -91,8 +109,8 @@ export default function OurTeamSection() {
             </div>
           </div>
 
-          {/* Right collage - interactive */}
-          <div className="relative h-[360px] md:h-[420px] lg:h-[460px] grid place-items-center">
+          {/* Right collage - interactive with bios */}
+          <div className="relative h-[420px] md:h-[460px] lg:h-[500px] grid place-items-center">
             {MEMBERS.map((member, index) => {
               const slot = getSlot(index);
               const pose = getMotionForSlot(slot);
@@ -115,7 +133,14 @@ export default function OurTeamSection() {
                   style={{ cursor: "pointer" }}
                 >
                   <Image src={member.src} alt={member.alt} fill className="object-cover" sizes="(min-width: 1024px) 300px, (min-width: 768px) 260px, 220px" />
-                  <span className="sr-only">{member.alt}</span>
+                  <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/60 to-transparent text-white">
+                    <div className="font-semibold text-sm md:text-base">{member.name}</div>
+                    {isCenter && (
+                      <p className="mt-1 text-xs md:text-sm leading-snug opacity-95">
+                        {member.bio}
+                      </p>
+                    )}
+                  </div>
                 </motion.button>
               );
             })}

@@ -3,8 +3,11 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import type { CSSProperties } from "react";
+import Link from "next/link";
+import { useModal } from "@/components/providers/ModalProvider";
 
 export default function HeroSection() {
+  const { openModal } = useModal();
   const images = [
     { src: "/heroSection/BlackGirl.png", alt: "Jeune femme souriante" },
     { src: "/heroSection/GuyWithGlasses.png", alt: "Jeune homme avec lunettes" },
@@ -103,6 +106,43 @@ export default function HeroSection() {
         >
           Nous croyons qu’un échange sincère peut illuminer une journée et réchauffer le cœur. Que ce soit par un appel vocal anonyme, une visioconférence conviviale ou une rencontre en personne autour d’un café ou d’une balade, nous créons des instants authentiques pour partager, écouter et se sentir véritablement connecté.
         </motion.p>
+
+        {/* Primary CTAs */}
+        <motion.div
+          className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-20% 0px -20% 0px" }}
+          transition={{ duration: 0.4, ease: "easeOut", delay: 0.15 }}
+        >
+          <button
+            type="button"
+            onClick={() => openModal('consultation')}
+            className="px-5 sm:px-6 py-3 rounded-xl font-semibold text-white shadow hover:-translate-y-0.5 transition-transform"
+            style={{ background: 'linear-gradient(90deg, var(--color-cta), var(--color-cta-hover))' }}
+            aria-label="Réserver un moment"
+          >
+            Réserver un moment
+          </button>
+
+          <Link
+            href="#agents"
+            className="px-5 sm:px-6 py-3 rounded-xl font-semibold ring-1 ring-black/5 text-gray-900 hover:-translate-y-0.5 transition-transform shadow"
+            style={{ background: 'var(--color-mint)' }}
+            aria-label="Parler avec un agent"
+          >
+            Parler avec un agent
+          </Link>
+
+          <Link
+            href="#contact"
+            className="px-5 sm:px-6 py-3 rounded-xl font-semibold ring-1 ring-black/5 text-gray-900 hover:-translate-y-0.5 transition-transform shadow"
+            style={{ background: 'var(--color-sky)' }}
+            aria-label="Planifier une rencontre"
+          >
+            Planifier une rencontre
+          </Link>
+        </motion.div>
       </div>
 
       {/* Symmetric mirrored masonry */}

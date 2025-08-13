@@ -66,7 +66,7 @@ export default function ServicesSection() {
             >
               <Image
                 src={service.imageSrc}
-                alt={`${service.title} - ${service.subtitle}`}
+                alt={`${service.title}`}
                 fill
                 className="object-cover transition-transform duration-300 will-change-transform"
                 sizes="(min-width: 1024px) 28rem, (min-width: 768px) 30vw, 88vw"
@@ -82,9 +82,8 @@ export default function ServicesSection() {
                   <h3 className="text-3xl md:text-4xl font-extrabold tracking-tight">
                     {service.title}
                   </h3>
-                  <p className="mt-1 text-sm md:text-base opacity-95">
-                    {service.subtitle}
-                  </p>
+                  {/* Subtitle kept for accessibility but not visually displayed to avoid repetition */}
+                  <span className="sr-only">{service.subtitle}</span>
                 </div>
               </div>
             </motion.article>
