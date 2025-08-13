@@ -2,20 +2,12 @@
 
 import { Phone, Smartphone, Mail, MapPin, Users } from "lucide-react";
 import { useState } from "react";
-import FormModal from "../models/ContactModel";
+import { useModal } from "@/components/providers/ModalProvider";
 
 type ModalType = 'consultation' | 'service' | 'job' | 'partnership';
 
 export default function ContactSection() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalType, setModalType] = useState<ModalType>('consultation');
-
-  const openModal = (type: ModalType) => {
-    setModalType(type);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => setIsModalOpen(false);
+  const { openModal } = useModal();
 
   return (
     <section id="contact" aria-label="Contact" className="relative py-20 md:py-24 lg:py-28">
@@ -123,7 +115,7 @@ export default function ContactSection() {
           </div>
         </div>
 
-        <FormModal isOpen={isModalOpen} onClose={closeModal} formType={modalType} />
+        {/* Modal is provided globally by ModalProvider */}
       </div>
     </section>
   );

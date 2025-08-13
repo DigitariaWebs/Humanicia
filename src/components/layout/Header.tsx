@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { motion } from "framer-motion";
+import { useModal } from "@/components/providers/ModalProvider";
 
 const MotionLink = motion.create(Link);
 
@@ -22,6 +23,7 @@ const NAV_ITEMS: NavItem[] = [
 
 export default function Header() {
   const pathname = usePathname();
+  const { openModal } = useModal();
 
   const isActive = (href: string): boolean => {
     if (href === "/") return pathname === "/";
@@ -76,18 +78,13 @@ export default function Header() {
 
           {/* CTA button */}
           <div className="w-24 flex justify-end">
-            <MotionLink
-              href="/rejoindre"
+            <button
+              onClick={() => openModal("consultation")}
               className="inline-flex items-center rounded-full px-4 py-2 text-white text-sm font-semibold shadow-sm focus:outline-none focus-visible:ring-2"
-              style={{
-                backgroundColor: "var(--color-cta)",
-              }}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              style={{ backgroundColor: "var(--color-cta)" }}
             >
               Rejoindre
-            </MotionLink>
+            </button>
           </div>
         </motion.div>
       </div>
