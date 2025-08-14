@@ -61,7 +61,6 @@ export default function InfiniteSlider({
     const ro = new ResizeObserver(() => compute());
     ro.observe(containerRef.current);
     return () => ro.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [images, itemSize, gap]);
 
   const duplicated = React.useMemo(() => [...group, ...group], [group]);

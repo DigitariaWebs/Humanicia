@@ -42,8 +42,13 @@ function Stars() {
   return (
     <div className="flex items-center gap-0.5" aria-label="5 sur 5">
       {Array.from({ length: 5 }).map((_, i) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <span key={i} className="text-lg" style={{ color: "#F4B840" }}>★</span>
+        <span
+          key={`star-${i}`}
+          className="text-lg"
+          style={{ color: "#F4B840" }}
+        >
+          ★
+        </span>
       ))}
     </div>
   );

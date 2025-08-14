@@ -130,7 +130,7 @@ const FormModal: React.FC<FormModalProps> = ({ isOpen, onClose, formType, servic
       } else {
         setApiError(result.error || "Erreur lors de l'envoi du formulaire. Veuillez réessayer.");
       }
-    } catch (error) {
+    } catch {
       setApiError('Erreur de connexion. Vérifiez votre connexion internet et réessayez.');
     } finally {
       setIsLoading(false);

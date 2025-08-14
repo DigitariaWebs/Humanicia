@@ -1,10 +1,9 @@
 "use client";
 
 import { Phone, Smartphone, Mail, MapPin, Users } from "lucide-react";
-import { useState } from "react";
 import { useModal } from "@/components/providers/ModalProvider";
 
-type ModalType = 'consultation' | 'service' | 'job' | 'partnership';
+// type ModalType = 'consultation' | 'service' | 'job' | 'partnership';
 
 export default function ContactSection() {
   const { openModal } = useModal();
