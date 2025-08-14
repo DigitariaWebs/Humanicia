@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useModal } from "@/components/providers/ModalProvider";
 
 type ChatRole = "bot" | "user";
 
@@ -48,6 +49,7 @@ function replyFor(input: string): string {
 }
 
 export default function ChatWidget() {
+  const { isModalOpen } = useModal();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -117,6 +119,10 @@ export default function ChatWidget() {
     };
     // Simulate a tiny delay for UX
     setTimeout(() => setMessages((m) => [...m, botMessage]), 300);
+  }
+
+  if (isModalOpen) {
+    return null;
   }
 
   return (

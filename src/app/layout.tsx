@@ -22,8 +22,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`antialiased`}>
-        <ModalProvider>{children}</ModalProvider>
-        <ChatWidget />
+        <ModalProvider>
+          {children}
+          <ChatWidget />
+        </ModalProvider>
       </body>
     </html>
   );

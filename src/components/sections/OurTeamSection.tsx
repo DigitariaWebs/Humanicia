@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import React from "react";
 
 function Star({ filled = false }: { filled?: boolean }) {
@@ -22,7 +22,13 @@ function Star({ filled = false }: { filled?: boolean }) {
   );
 }
 
-type Member = { id: string; src: string; alt: string; name: string; bio: string };
+type Member = {
+  id: string;
+  src: string;
+  alt: string;
+  name: string;
+  bio: string;
+};
 
 const MEMBERS: Member[] = [
   {
@@ -51,22 +57,85 @@ const MEMBERS: Member[] = [
 export default function OurTeamSection() {
   const [activeIndex, setActiveIndex] = React.useState<number>(1); // center by default
 
+  function useResponsiveBreakpoint(): "sm" | "md" | "lg" {
+    const [breakpoint, setBreakpoint] = React.useState<"sm" | "md" | "lg">(
+      "sm"
+    );
+    React.useEffect(() => {
+      const mdQuery = window.matchMedia("(min-width: 768px)");
+      const lgQuery = window.matchMedia("(min-width: 1024px)");
+      const update = () =>
+        setBreakpoint(lgQuery.matches ? "lg" : mdQuery.matches ? "md" : "sm");
+      update();
+      mdQuery.addEventListener("change", update);
+      lgQuery.addEventListener("change", update);
+      return () => {
+        mdQuery.removeEventListener("change", update);
+        lgQuery.removeEventListener("change", update);
+      };
+    }, []);
+    return breakpoint;
+  }
+
   const getSlot = (index: number): "left" | "center" | "right" => {
     if (index === activeIndex) return "center";
     const rightIndex = (activeIndex + 1) % MEMBERS.length;
     return index === rightIndex ? "right" : "left";
   };
 
-  const getMotionForSlot = (slot: "left" | "center" | "right") => {
-    // Positions tuned for mobile; media queries handled with relative values
-    switch (slot) {
-      case "left":
-        return { x: -120, y: 24, rotate: -8, zIndex: 10, scale: 0.96 };
-      case "right":
-        return { x: 120, y: 36, rotate: 6, zIndex: 10, scale: 0.96 };
-      default:
-        return { x: 0, y: 0, rotate: 3, zIndex: 30, scale: 1 };
-    }
+  const prefersReducedMotion = useReducedMotion();
+  const breakpoint = useResponsiveBreakpoint();
+
+  const getMotionForSlot = (
+    slot: "left" | "center" | "right",
+    currentBreakpoint: "sm" | "md" | "lg",
+    reduceMotion: boolean
+  ) => {
+    const widthByBreakpoint = {
+      sm: { center: 220, side: 190 },
+      md: { center: 260, side: 220 },
+      lg: { center: 300, side: 240 },
+    } as const;
+
+    const presets = {
+      sm: {
+        left: { x: -70, y: 16, rotate: -6 },
+        right: { x: 70, y: 20, rotate: 5 },
+        center: { x: 0, y: 0, rotate: 2 },
+      },
+      md: {
+        left: { x: -120, y: 22, rotate: -8 },
+        right: { x: 120, y: 26, rotate: 6 },
+        center: { x: 0, y: 0, rotate: 3 },
+      },
+      lg: {
+        left: { x: -160, y: 26, rotate: -9 },
+        right: { x: 160, y: 30, rotate: 7 },
+        center: { x: 0, y: 0, rotate: 3 },
+      },
+    } as const;
+
+    const base =
+      slot === "left"
+        ? presets[currentBreakpoint].left
+        : slot === "right"
+        ? presets[currentBreakpoint].right
+        : presets[currentBreakpoint].center;
+
+    // Anchor from the center of the container so cards don't touch edges
+    const isCenter = slot === "center";
+    const cardWidth =
+      widthByBreakpoint[currentBreakpoint][isCenter ? "center" : "side"];
+    const cardHeight = Math.round((cardWidth * 4) / 3); // aspect-[3/4]
+    const anchorX = -cardWidth / 2;
+    const anchorY = -cardHeight / 2;
+
+    const motionValues = reduceMotion
+      ? { x: anchorX + base.x, y: anchorY + base.y, rotate: 0 }
+      : { x: anchorX + base.x, y: anchorY + base.y, rotate: base.rotate };
+    const zIndex = slot === "center" ? 30 : 10;
+    const scale = slot === "center" ? 1 : 0.96;
+    return { ...motionValues, zIndex, scale };
   };
 
   const spring = { type: "spring" as const, stiffness: 320, damping: 26 };
@@ -77,7 +146,10 @@ export default function OurTeamSection() {
         <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
           {/* Left content */}
           <div>
-            <p className="text-sm font-semibold" style={{ color: "var(--color-cta)" }}>
+            <p
+              className="text-sm font-semibold"
+              style={{ color: "var(--color-cta)" }}
+            >
               Notre équipe
             </p>
             <h2
@@ -93,18 +165,27 @@ export default function OurTeamSection() {
                   <Star key={i} filled={i < 4} />
                 ))}
               </div>
-              <span className="text-sm" style={{ color: "var(--color-muted)" }}>4/5</span>
+              <span className="text-sm" style={{ color: "var(--color-muted)" }}>
+                4/5
+              </span>
             </div>
 
-            <div className="mt-6 text-base md:text-lg leading-relaxed text-justify" style={{ color: "var(--color-text)" }}>
+            <div
+              className="mt-6 text-base md:text-lg leading-relaxed text-justify"
+              style={{ color: "var(--color-text)" }}
+            >
               <p>
-                Chez Humanicia, chaque agent est bien plus qu’une voix ou un visage à l’écran. Ce sont des personnes passionnées
-                par l’échange humain, choisies pour leur écoute, leur bienveillance et leur authenticité. Chacun apporte sa
-                personnalité et ses centres d’intérêt, afin que chaque conversation soit unique et sincère.
+                Chez Humanicia, chaque agent est bien plus qu’une voix ou un
+                visage à l’écran. Ce sont des personnes passionnées par
+                l’échange humain, choisies pour leur écoute, leur bienveillance
+                et leur authenticité. Chacun apporte sa personnalité et ses
+                centres d’intérêt, afin que chaque conversation soit unique et
+                sincère.
               </p>
               <p className="mt-4">
-                Que vous cherchiez à discuter de voyages, à partager un souvenir ou à apprendre quelque chose de nouveau, nos
-                agents sont là pour vous offrir une présence chaleureuse, adaptée à vos envies.
+                Que vous cherchiez à discuter de voyages, à partager un souvenir
+                ou à apprendre quelque chose de nouveau, nos agents sont là pour
+                vous offrir une présence chaleureuse, adaptée à vos envies.
               </p>
             </div>
           </div>
@@ -113,7 +194,11 @@ export default function OurTeamSection() {
           <div className="relative h-[420px] md:h-[460px] lg:h-[500px] grid place-items-center">
             {MEMBERS.map((member, index) => {
               const slot = getSlot(index);
-              const pose = getMotionForSlot(slot);
+              const pose = getMotionForSlot(
+                slot,
+                breakpoint,
+                !!prefersReducedMotion
+              );
               const isCenter = slot === "center";
               const widthClass = isCenter
                 ? "w-[220px] md:w-[260px] lg:w-[300px]"
@@ -130,11 +215,19 @@ export default function OurTeamSection() {
                   whileHover={{ scale: isCenter ? 1.03 : 1.05, y: pose.y - 4 }}
                   whileTap={{ scale: 0.98 }}
                   aria-label="Choisir cet agent"
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer", left: "50%", top: "50%" }}
                 >
-                  <Image src={member.src} alt={member.alt} fill className="object-cover" sizes="(min-width: 1024px) 300px, (min-width: 768px) 260px, 220px" />
+                  <Image
+                    src={member.src}
+                    alt={member.alt}
+                    fill
+                    className="object-cover"
+                    sizes="(min-width: 1024px) 300px, (min-width: 768px) 260px, 220px"
+                  />
                   <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/60 to-transparent text-white">
-                    <div className="font-semibold text-sm md:text-base">{member.name}</div>
+                    <div className="font-semibold text-sm md:text-base">
+                      {member.name}
+                    </div>
                     {isCenter && (
                       <p className="mt-1 text-xs md:text-sm leading-snug opacity-95">
                         {member.bio}
@@ -152,9 +245,7 @@ export default function OurTeamSection() {
           className="mt-16 md:mt-20 lg:mt-24 rounded-2xl px-4 py-10 md:py-14 text-center"
           style={{ backgroundColor: "var(--color-mint)" }}
         >
-          <h3
-            className="font-extrabold leading-snug text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white"
-          >
+          <h3 className="font-extrabold leading-snug text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white">
             <span
               className="rounded inline-block px-3 py-1"
               style={{
@@ -177,9 +268,13 @@ export default function OurTeamSection() {
               Vos Moments De Solitude
             </span>
           </h3>
-          <p className="mt-6 text-sm sm:text-base md:text-lg font-medium max-w-3xl mx-auto" style={{ color: "var(--color-text)" }}>
-            Parce que chacun mérite une oreille attentive et une présence bienveillante, Humanicia vous accompagne dans les
-            instants où le lien humain fait toute la différence.
+          <p
+            className="mt-6 text-sm sm:text-base md:text-lg font-medium max-w-3xl mx-auto"
+            style={{ color: "var(--color-text)" }}
+          >
+            Parce que chacun mérite une oreille attentive et une présence
+            bienveillante, Humanicia vous accompagne dans les instants où le
+            lien humain fait toute la différence.
           </p>
         </div>
       </div>
