@@ -50,15 +50,14 @@ export default function Header() {
       (entries) => {
         const intersecting = entries.filter((e) => e.isIntersecting);
         if (intersecting.length > 0) {
-          intersecting.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+          intersecting.sort(
+            (a, b) => b.intersectionRatio - a.intersectionRatio
+          );
           setActiveSectionId(intersecting[0].target.id);
-          return;
+        } else {
+          // If no observed section is in view, keep homepage highlighted
+          setActiveSectionId(null);
         }
-
-        const closestToTop = entries.reduce((prev, curr) =>
-          Math.abs(curr.boundingClientRect.top) < Math.abs(prev.boundingClientRect.top) ? curr : prev
-        );
-        setActiveSectionId(closestToTop.target.id);
       },
       { rootMargin: "-40% 0px -60% 0px", threshold: [0.25, 0.5, 0.75] }
     );

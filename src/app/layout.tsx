@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import ModalProvider from "@/components/providers/ModalProvider";
+import ChatWidget from "@/components/ui/ChatWidget";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,9 +16,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`antialiased`}>
-        <ModalProvider>
-          {children}
-        </ModalProvider>
+        <ModalProvider>{children}</ModalProvider>
+        <ChatWidget />
       </body>
     </html>
   );
