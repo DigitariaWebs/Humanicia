@@ -24,12 +24,18 @@ const NAV_ITEMS: NavItem[] = [
 export default function Header() {
   const pathname = usePathname();
   const { openModal } = useModal();
+  const [mobileOpen, setMobileOpen] = React.useState(false);
 
   // Track which in-page section is active on the homepage
-  const [activeSectionId, setActiveSectionId] = React.useState<string | null>(null);
+  const [activeSectionId, setActiveSectionId] = React.useState<string | null>(
+    null
+  );
 
   const sectionIds = React.useMemo(
-    () => NAV_ITEMS.filter((i) => i.href.startsWith("/#")).map((i) => i.href.split("#")[1] || ""),
+    () =>
+      NAV_ITEMS.filter((i) => i.href.startsWith("/#")).map(
+        (i) => i.href.split("#")[1] || ""
+      ),
     []
   );
 
@@ -41,7 +47,9 @@ export default function Header() {
     }
 
     const elements = sectionIds
-      .map((id) => (typeof document !== "undefined" ? document.getElementById(id) : null))
+      .map((id) =>
+        typeof document !== "undefined" ? document.getElementById(id) : null
+      )
       .filter(Boolean) as HTMLElement[];
 
     if (elements.length === 0) return;
@@ -86,71 +94,158 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/70 border-b" style={{ borderColor: "var(--color-border)" }}>
-      {/* Main navigation row */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          className="h-20 flex items-center justify-between"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
-        >
-          {/* Left spacer to aid centering on larger screens */}
-          <div className="w-24 hidden md:block" />
+    <>
+      <header
+        className="fixed top-0 z-50 w-full bg-white backdrop-blur supports-[backdrop-filter]:bg-white border-b"
+        style={{ borderColor: "var(--color-border)" }}
+      >
+        {/* Main navigation row */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            className="h-20 flex items-center justify-between"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+          >
+            {/* Mobile menu toggle (phones) aligned right */}
+            <div className="w-12 flex md:hidden ml-auto">
+              <button
+                type="button"
+                aria-label={mobileOpen ? "Close menu" : "Open menu"}
+                onClick={() => setMobileOpen((v) => !v)}
+                className="inline-flex items-center justify-center h-10 w-10 rounded-md ring-1 ring-black/5 bg-white/70 backdrop-blur"
+              >
+                {mobileOpen ? (
+                  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden>
+                    <path
+                      d="M6 6l12 12M18 6L6 18"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden>
+                    <path
+                      d="M4 7h16M4 12h16M4 17h16"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                )}
+              </button>
+            </div>
+            <div className="w-24 hidden md:block" />
 
-          {/* Centered nav */}
-          <nav className="flex-1 flex items-center justify-center overflow-x-auto">
-            <ul className="flex items-center gap-8">
-              {NAV_ITEMS.map((item) => (
-                <li key={item.href}>
-                  <MotionLink
-                    href={item.href}
-                    className={[
-                      "text-base rounded-md px-2 py-1 transition-colors",
-                      isActive(item.href) ? "font-semibold" : "",
-                    ].join(" ")}
-                    style={{
-                      color: isActive(item.href)
-                        ? "var(--color-brand)"
-                        : "color-mix(in oklab, var(--color-brand) 60%, white)",
-                      backgroundColor: "transparent",
-                    }}
+            {/* Centered nav */}
+            <nav className="hidden md:flex flex-1 items-center justify-center overflow-x-auto">
+              <ul className="flex items-center gap-8">
+                {NAV_ITEMS.map((item) => (
+                  <li key={item.href}>
+                    <MotionLink
+                      href={item.href}
+                      className={[
+                        "text-base rounded-md px-2 py-1 transition-colors",
+                        isActive(item.href) ? "font-semibold" : "",
+                      ].join(" ")}
+                      style={{
+                        color: isActive(item.href)
+                          ? "var(--color-brand)"
+                          : "color-mix(in oklab, var(--color-brand) 60%, white)",
+                        backgroundColor: "transparent",
+                      }}
+                      onClick={() => {
+                        if (item.href === "/") {
+                          setActiveSectionId(null);
+                        } else if (item.href.startsWith("/#")) {
+                          const id = item.href.split("#")[1] || "";
+                          setActiveSectionId(id);
+                        }
+                      }}
+                      whileHover={{
+                        y: -2,
+                        color: "var(--color-cta)",
+                        backgroundColor:
+                          "color-mix(in oklab, var(--color-cta) 14%, white)",
+                      }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 18,
+                      }}
+                    >
+                      {item.label}
+                    </MotionLink>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            {/* CTA button */}
+            <div className="w-24 hidden md:flex justify-end">
+              <button
+                onClick={() => openModal("consultation")}
+                className="inline-flex items-center rounded-full px-4 py-2 text-white text-sm font-semibold shadow-sm focus:outline-none focus-visible:ring-2"
+                style={{ backgroundColor: "var(--color-cta)" }}
+              >
+                Rejoindre
+              </button>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Mobile menu panel */}
+        {mobileOpen && (
+          <div
+            className="md:hidden fixed top-20 inset-x-0 z-50 border-b bg-white backdrop-blur supports-[backdrop-filter]:bg-white"
+            style={{ borderColor: "var(--color-border)" }}
+          >
+            <nav className="max-w-7xl mx-auto px-4 py-3">
+              <ul className="grid gap-2">
+                {NAV_ITEMS.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className="block rounded-md px-3 py-2 text-base"
+                      style={{
+                        color: isActive(item.href)
+                          ? "var(--color-brand)"
+                          : "color-mix(in oklab, var(--color-brand) 70%, white)",
+                      }}
+                      onClick={() => {
+                        setMobileOpen(false);
+                        if (item.href === "/") {
+                          setActiveSectionId(null);
+                        } else if (item.href.startsWith("/#")) {
+                          const id = item.href.split("#")[1] || "";
+                          setActiveSectionId(id);
+                        }
+                      }}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+                <li className="pt-1">
+                  <button
                     onClick={() => {
-                      if (item.href === "/") {
-                        setActiveSectionId(null);
-                      } else if (item.href.startsWith("/#")) {
-                        const id = item.href.split("#")[1] || "";
-                        setActiveSectionId(id);
-                      }
+                      setMobileOpen(false);
+                      openModal("consultation");
                     }}
-                    whileHover={{
-                      y: -2,
-                      color: "var(--color-cta)",
-                      backgroundColor:
-                        "color-mix(in oklab, var(--color-cta) 14%, white)",
-                    }}
-                    transition={{ type: "spring", stiffness: 300, damping: 18 }}
+                    className="w-full inline-flex items-center justify-center rounded-full px-4 py-2 text-white text-sm font-semibold shadow-sm"
+                    style={{ backgroundColor: "var(--color-cta)" }}
                   >
-                    {item.label}
-                  </MotionLink>
+                    Rejoindre
+                  </button>
                 </li>
-              ))}
-            </ul>
-          </nav>
-
-          {/* CTA button */}
-          <div className="w-24 flex justify-end">
-            <button
-              onClick={() => openModal("consultation")}
-              className="inline-flex items-center rounded-full px-4 py-2 text-white text-sm font-semibold shadow-sm focus:outline-none focus-visible:ring-2"
-              style={{ backgroundColor: "var(--color-cta)" }}
-            >
-              Rejoindre
-            </button>
+              </ul>
+            </nav>
           </div>
-        </motion.div>
-      </div>
-    </header>
+        )}
+      </header>
+      <div aria-hidden className="h-20 w-full" />
+    </>
   );
 }
 

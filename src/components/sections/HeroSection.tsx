@@ -104,12 +104,16 @@ export default function HeroSection() {
           viewport={{ once: true, margin: "-20% 0px -20% 0px" }}
           transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
         >
-          Nous croyons qu’un échange sincère peut illuminer une journée et réchauffer le cœur. Que ce soit par un appel vocal anonyme, une visioconférence conviviale ou une rencontre en personne autour d’un café ou d’une balade, nous créons des instants authentiques pour partager, écouter et se sentir véritablement connecté.
+          Nous croyons qu’un échange sincère peut illuminer une journée et
+          réchauffer le cœur. Que ce soit par un appel vocal anonyme, une
+          visioconférence conviviale ou une rencontre en personne autour d’un
+          café ou d’une balade, nous créons des instants authentiques pour
+          partager, écouter et se sentir véritablement connecté.
         </motion.p>
 
         {/* Primary CTAs */}
         <motion.div
-          className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
+          className="mt-6 sm:mt-8 flex flex-row items-center justify-center gap-2 sm:gap-4"
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-20% 0px -20% 0px" }}
@@ -117,30 +121,36 @@ export default function HeroSection() {
         >
           <button
             type="button"
-            onClick={() => openModal('consultation')}
-            className="px-5 sm:px-6 py-3 rounded-xl font-semibold text-white shadow hover:-translate-y-0.5 transition-transform"
-            style={{ background: 'linear-gradient(90deg, var(--color-cta), var(--color-cta-hover))' }}
+            onClick={() => openModal("consultation")}
+            className="px-3 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold text-white text-sm sm:text-base shadow hover:-translate-y-0.5 transition-transform"
+            style={{
+              background:
+                "linear-gradient(90deg, var(--color-cta), var(--color-cta-hover))",
+            }}
             aria-label="Réserver un moment"
           >
-            Réserver un moment
+            <span className="sm:hidden">Réserver</span>
+            <span className="hidden sm:inline">Réserver un moment</span>
           </button>
 
           <Link
             href="#agents"
-            className="px-5 sm:px-6 py-3 rounded-xl font-semibold ring-1 ring-black/5 text-gray-900 hover:-translate-y-0.5 transition-transform shadow"
-            style={{ background: 'var(--color-mint)' }}
+            className="px-3 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold ring-1 ring-black/5 text-gray-900 text-sm sm:text-base hover:-translate-y-0.5 transition-transform shadow"
+            style={{ background: "var(--color-mint)" }}
             aria-label="Parler avec un agent"
           >
-            Parler avec un agent
+            <span className="sm:hidden">Parler</span>
+            <span className="hidden sm:inline">Parler avec un agent</span>
           </Link>
 
           <Link
             href="#contact"
-            className="px-5 sm:px-6 py-3 rounded-xl font-semibold ring-1 ring-black/5 text-gray-900 hover:-translate-y-0.5 transition-transform shadow"
-            style={{ background: 'var(--color-sky)' }}
+            className="px-3 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold ring-1 ring-black/5 text-gray-900 text-sm sm:text-base hover:-translate-y-0.5 transition-transform shadow"
+            style={{ background: "var(--color-sky)" }}
             aria-label="Planifier une rencontre"
           >
-            Planifier une rencontre
+            <span className="sm:hidden">Rencontre</span>
+            <span className="hidden sm:inline">Planifier une rencontre</span>
           </Link>
         </motion.div>
       </div>
@@ -149,18 +159,25 @@ export default function HeroSection() {
       <div className="max-w-6xl mx-auto px-4 mt-12">
         <div className="grid md:grid-cols-2 gap-6 md:gap-10 items-start">
           {/* Left half */}
-          <div className="grid grid-cols-3 gap-4 md:gap-5">
+          <div className="grid grid-cols-3 gap-4 md:gap-5 order-2 md:order-1">
             {leftColumns.map((col, colIdx) => (
               <motion.div
                 key={`left-col-${colIdx}`}
-                className={`flex flex-col gap-4 md:gap-5 ${col.length === 1 ? 'h-[23rem] md:h-[29.25rem] justify-center' : ''} ${colIdx % 2 === 0 ? 'motion-up' : 'motion-down'}`}
+                className={`flex flex-col gap-4 md:gap-5 ${
+                  col.length === 1
+                    ? "h-[23rem] md:h-[29.25rem] justify-center"
+                    : ""
+                } ${colIdx % 2 === 0 ? "motion-up" : "motion-down"}`}
                 style={
                   {
                     // Staggered durations and delays per column
                     // col 0: slower, col 1: medium, col 2: faster (and with unique delays)
-                    "--motion-duration": colIdx === 0 ? "9s" : colIdx === 1 ? "7.5s" : "6s",
-                    "--motion-delay": colIdx === 0 ? "0.2s" : colIdx === 1 ? "0.8s" : "1.4s",
-                  } as CSSProperties & Record<"--motion-duration" | "--motion-delay", string>
+                    "--motion-duration":
+                      colIdx === 0 ? "9s" : colIdx === 1 ? "7.5s" : "6s",
+                    "--motion-delay":
+                      colIdx === 0 ? "0.2s" : colIdx === 1 ? "0.8s" : "1.4s",
+                  } as CSSProperties &
+                    Record<"--motion-duration" | "--motion-delay", string>
                 }
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -190,16 +207,23 @@ export default function HeroSection() {
           </div>
 
           {/* Right half (mirrored) */}
-          <div className="grid grid-cols-3 gap-4 md:gap-5">
+          <div className="grid grid-cols-3 gap-4 md:gap-5 order-1 md:order-2">
             {rightColumns.map((col, colIdx) => (
               <motion.div
                 key={`right-col-${colIdx}`}
-                className={`flex flex-col gap-4 md:gap-5 ${col.length === 1 ? 'h-[23rem] md:h-[29.25rem] justify-center' : ''} ${colIdx % 2 === 0 ? 'motion-up' : 'motion-down'}`}
+                className={`flex flex-col gap-4 md:gap-5 ${
+                  col.length === 1
+                    ? "h-[23rem] md:h-[29.25rem] justify-center"
+                    : ""
+                } ${colIdx % 2 === 0 ? "motion-up" : "motion-down"}`}
                 style={
                   {
-                    "--motion-duration": colIdx === 0 ? "8.5s" : colIdx === 1 ? "7s" : "6.25s",
-                    "--motion-delay": colIdx === 0 ? "0.5s" : colIdx === 1 ? "0.1s" : "1.1s",
-                  } as CSSProperties & Record<"--motion-duration" | "--motion-delay", string>
+                    "--motion-duration":
+                      colIdx === 0 ? "8.5s" : colIdx === 1 ? "7s" : "6.25s",
+                    "--motion-delay":
+                      colIdx === 0 ? "0.5s" : colIdx === 1 ? "0.1s" : "1.1s",
+                  } as CSSProperties &
+                    Record<"--motion-duration" | "--motion-delay", string>
                 }
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}

@@ -50,6 +50,12 @@ body {
     scroll-behavior: smooth;
 }
 
+/* Prevent horizontal overflow that can visually shift the page to the left */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
 /* Offset anchor scrolling to account for sticky header height */
 /* Using positive scroll-margin-top so anchored sections aren't hidden under sticky header */
 section[id],
