@@ -19,52 +19,45 @@ const SERVICE_DETAILS: ServiceInfo[] = [
     id: "audio",
     title: "Appels vocaux",
     imageSrc: "/ServiceSection/AppelsVocaux.jpg",
-    pricing: "20 $ / 30 min – 35 $ / 1 h",
-    description: "Parce qu'une voix au bout du fil peut changer une journée :",
+    pricing: "20 $ / 30 min · 35 $ / 1 h",
+    description: "Une voix qui t'écoute vraiment, sans jugement.",
     features: [
-      "Briser la solitude pendant une pause.",
-      "Raconter sa journée à quelqu'un qui écoute.",
-      "Partager un souvenir ou un projet.",
-      "Vider son sac, sans jugement.",
+      "Raconte ta journée après le boulot.",
+      "Brise la solitude, comme un café avec un ami.",
     ],
   },
   {
     id: "anonymous",
     title: "Appels anonymes",
     imageSrc: "/ServiceSection/AnonymousCalls.png",
-    pricing: "20 $ / 30 min – 35 $ / 1 h",
-    description: "Parler librement, sans dévoiler son identité :",
+    pricing: "20 $ / 30 min · 35 $ / 1 h",
+    description: "Parle librement, en toute discrétion.",
     features: [
-      "Se confier en toute discrétion.",
-      "Dire ce qu'on a sur le cœur.",
-      "Trouver un espace neutre et bienveillant.",
-      "Avoir une conversation légère, sans engagement.",
+      "Confie un secret sans jamais dire ton nom.",
+      "Vide ton sac, sans filtre ni gêne.",
     ],
   },
   {
     id: "visio",
     title: "Appels visio",
     imageSrc: "/ServiceSection/AppelVisio.jpg",
-    pricing: "25 $ / 30 min – 45 $ / 1 h",
-    description: "Parce que voir un visage change tout :",
+    pricing: "25 $ / 30 min · 45 $ / 1 h",
+    description: "Parce que voir un visage change tout.",
     features: [
-      "Partager un café virtuel.",
-      "Échanger avec sourires et regards.",
-      "Montrer un lieu ou un objet.",
-      "Avoir un face-à-face humain, à distance.",
+      "Un café virtuel qui ressemble à un vrai.",
+      "Sourires, regards, une vraie présence à distance.",
     ],
   },
   {
     id: "presence",
     title: "Activités en personne",
     imageSrc: "/ServiceSection/ActivitesPresence.jpg",
-    pricing: "À partir de 90 $ / h",
-    description: "Vivez un moment de vraie présence, pensé pour vous :",
+    pricing: "dès 90 $ / h",
+    description: "Une présence dédiée, pensée pour toi.",
     features: [
-      "Accompagnement lors d'un événement (mariage, sortie, rendez-vous).",
-      "Partager un café, une marche ou un repas.",
-      "Être là pendant une période plus difficile.",
-      "Ou toute autre activité qui vous ferait plaisir — les possibilités sont infinies.",
+      "Être accompagné à un mariage ou une sortie.",
+      "Partager une marche, un café ou un repas.",
+      "Un moment sur mesure, où les possibilités sont infinies.",
     ],
   },
 ];
@@ -75,8 +68,12 @@ interface ServiceModalProps {
   serviceId: string | null;
 }
 
-export default function ServiceModal({ isOpen, onClose, serviceId }: ServiceModalProps) {
-  const service = SERVICE_DETAILS.find(s => s.id === serviceId);
+export default function ServiceModal({
+  isOpen,
+  onClose,
+  serviceId,
+}: ServiceModalProps) {
+  const service = SERVICE_DETAILS.find((s) => s.id === serviceId);
 
   // Handle ESC key press and prevent body scroll
   React.useEffect(() => {
@@ -185,6 +182,20 @@ export default function ServiceModal({ isOpen, onClose, serviceId }: ServiceModa
                     </li>
                   ))}
                 </ul>
+
+                {/* Special note for in-person activities */}
+                {service.id === "presence" && (
+                  <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                    <p className="text-blue-800 text-sm leading-relaxed">
+                      <strong>
+                        Ce prix inclut un accompagnement personnalisé, une
+                        présence 100 % dédiée et un cadre sûr.
+                      </strong>{" "}
+                      Plus qu&apos;une simple sortie, c&apos;est un vrai moment
+                      humain, pensé pour vous.
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* Footer */}
