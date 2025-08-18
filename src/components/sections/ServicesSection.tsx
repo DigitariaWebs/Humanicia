@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import ServiceModal from "@/components/ui/ServiceModal";
 
 type Service = {
   id: string;
@@ -29,18 +31,47 @@ const SERVICES: Service[] = [
   {
     id: "presence",
     title: "Activités en présence",
-    subtitle: "Des moments authentiques, vécus ensemble",
+    subtitle: "Des moments authentiques, vécus ensemble",
     imageSrc: "/ServiceSection/ActivitesPresence.jpg",
     rotationDeg: 6,
+  },
+  {
+    id: "anonymous",
+    title: "Anonymous Calls",
+    subtitle: "Discussions confidentielles et anonymes",
+    imageSrc: "/ServiceSection/AnonymousCalls.png",
+    rotationDeg: -3,
   },
 ];
 
 export default function ServicesSection() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedServiceId, setSelectedServiceId] = useState<string | null>(
+    null
+  );
+
+  const handleServiceClick = (serviceId: string) => {
+    setSelectedServiceId(serviceId);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedServiceId(null);
+  };
+
   return (
-    <section id="services" aria-label="Nos services" className="relative pt-2 md:pt-3 lg:pt-4 pb-24 md:pb-28 lg:pb-32">
+    <section
+      id="services"
+      aria-label="Nos services"
+      className="relative pt-2 md:pt-3 lg:pt-4 pb-24 md:pb-28 lg:pb-32"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-16 md:mb-20">
-          <p className="text-sm font-semibold" style={{ color: "var(--color-cta)" }}>
+          <p
+            className="text-sm font-semibold"
+            style={{ color: "var(--color-cta)" }}
+          >
             Humanicia donne
           </p>
           <h2
@@ -51,16 +82,25 @@ export default function ServicesSection() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-14 lg:gap-20 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-14 lg:gap-20 items-center">
           {SERVICES.map((service, index) => (
             <motion.article
               key={service.id}
               initial={{ opacity: 0, y: 24, rotate: service.rotationDeg * 1.2 }}
               whileInView={{ opacity: 1, y: 0, rotate: service.rotationDeg }}
               viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.05 }}
-              whileHover={{ y: -8, rotate: service.rotationDeg * 0.8, scale: 1.02 }}
+              transition={{
+                duration: 0.6,
+                ease: "easeOut",
+                delay: index * 0.05,
+              }}
+              whileHover={{
+                y: -8,
+                rotate: service.rotationDeg * 0.8,
+                scale: 1.02,
+              }}
               whileTap={{ scale: 0.98 }}
+              onClick={() => handleServiceClick(service.id)}
               className="group relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-sm ring-1 ring-black/5 transition-shadow duration-300 hover:shadow-lg cursor-pointer"
               style={{ transformOrigin: "center" }}
             >
@@ -90,6 +130,13 @@ export default function ServicesSection() {
           ))}
         </div>
       </div>
+
+      {/* Service Modal */}
+      <ServiceModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        serviceId={selectedServiceId}
+      />
     </section>
   );
 }

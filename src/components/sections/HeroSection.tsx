@@ -9,11 +9,26 @@ import { useModal } from "@/components/providers/ModalProvider";
 export default function HeroSection() {
   const { openModal } = useModal();
   const images = [
-    { src: "/heroSection/BlackGirl.png", alt: "Jeune femme souriante" },
-    { src: "/heroSection/GuyWithGlasses.png", alt: "Jeune homme avec lunettes" },
-    { src: "/heroSection/ChineseGirl.png", alt: "Jeune femme asiatique" },
-    { src: "/heroSection/RedHeadGirl.png", alt: "Jeune femme rousse" },
-    { src: "/heroSection/BlackMan.png", alt: "Jeune homme souriant" },
+    {
+      src: "/heroSection/AutumnParkReflection.png",
+      alt: "Jeune femme souriante",
+    },
+    {
+      src: "/heroSection/SunlitMemoriesWithGrandma.png",
+      alt: "Jeune homme avec lunettes",
+    },
+    {
+      src: "/heroSection/ElderlyCoupleRelaxing.png",
+      alt: "Jeune femme asiatique",
+    },
+    {
+      src: "/heroSection/SunlitCafeConversation.png",
+      alt: "Jeune femme rousse",
+    },
+    {
+      src: "/heroSection/CoffeeShopConversation.png",
+      alt: "Jeune homme souriant",
+    },
   ];
 
   // Background color mapping by logical image order and mirrored counterpart

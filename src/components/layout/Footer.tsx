@@ -1,8 +1,16 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
+import ServiceModal from "@/components/ui/ServiceModal";
 
-function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
+function FooterLink({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
   return (
     <Link
       href={href}
@@ -34,6 +42,21 @@ function SocialIcon({
 }
 
 export default function Footer() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedServiceId, setSelectedServiceId] = useState<string | null>(
+    null
+  );
+
+  const handleServiceClick = (serviceId: string) => {
+    setSelectedServiceId(serviceId);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedServiceId(null);
+  };
+
   return (
     <footer className="bg-[#111] text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-16">
@@ -63,9 +86,30 @@ export default function Footer() {
           <div>
             <p className="text-sm font-semibold mb-3">Services</p>
             <nav className="space-y-2">
-              <FooterLink href="#">Appels vocaux</FooterLink>
-              <FooterLink href="#">Visioconférences</FooterLink>
-              <FooterLink href="#">Rencontres</FooterLink>
+              <button
+                onClick={() => handleServiceClick("audio")}
+                className="block text-[13px] md:text-sm leading-6 text-white/70 hover:text-white transition-colors text-left w-full cursor-pointer"
+              >
+                Appels vocaux
+              </button>
+              <button
+                onClick={() => handleServiceClick("visio")}
+                className="block text-[13px] md:text-sm leading-6 text-white/70 hover:text-white transition-colors text-left w-full cursor-pointer"
+              >
+                Appels visio
+              </button>
+              <button
+                onClick={() => handleServiceClick("presence")}
+                className="block text-[13px] md:text-sm leading-6 text-white/70 hover:text-white transition-colors text-left w-full cursor-pointer"
+              >
+                Activités en présence
+              </button>
+              <button
+                onClick={() => handleServiceClick("anonymous")}
+                className="block text-[13px] md:text-sm leading-6 text-white/70 hover:text-white transition-colors text-left w-full cursor-pointer"
+              >
+                Anonymous Calls
+              </button>
             </nav>
           </div>
 
@@ -112,7 +156,11 @@ export default function Footer() {
             {/* GitHub */}
             <SocialIcon href="#" label="GitHub">
               <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
-                <path fillRule="evenodd" clipRule="evenodd" d="M12 .5a11.5 11.5 0 0 0-3.64 22.42c.58.1.78-.25.78-.56v-2.1c-3.18.69-3.85-1.37-3.85-1.37-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.73 1.27 3.4.97.11-.76.41-1.27.75-1.57-2.54-.29-5.2-1.27-5.2-5.66 0-1.25.44-2.27 1.16-3.07-.12-.29-.5-1.48.11-3.08 0 0 .96-.31 3.15 1.17.91-.25 1.87-.38 2.84-.39.96.01 1.93.13 2.84.39 2.18-1.48 3.14-1.17 3.14-1.17.61 1.6.23 2.8.11 3.08.72.8 1.15 1.82 1.15 3.07 0 4.39-2.67 5.36-5.22 5.65.42.36.8 1.07.8 2.17v3.22c0 .31.2.67.79.56A11.5 11.5 0 0 0 12 .5Z" />
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M12 .5a11.5 11.5 0 0 0-3.64 22.42c.58.1.78-.25.78-.56v-2.1c-3.18.69-3.85-1.37-3.85-1.37-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.73 1.27 3.4.97.11-.76.41-1.27.75-1.57-2.54-.29-5.2-1.27-5.2-5.66 0-1.25.44-2.27 1.16-3.07-.12-.29-.5-1.48.11-3.08 0 0 .96-.31 3.15 1.17.91-.25 1.87-.38 2.84-.39.96.01 1.93.13 2.84.39 2.18-1.48 3.14-1.17 3.14-1.17.61 1.6.23 2.8.11 3.08.72.8 1.15 1.82 1.15 3.07 0 4.39-2.67 5.36-5.22 5.65.42.36.8 1.07.8 2.17v3.22c0 .31.2.67.79.56A11.5 11.5 0 0 0 12 .5Z"
+                />
               </svg>
             </SocialIcon>
             {/* Instagram */}
@@ -124,6 +172,13 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
+      {/* Service Modal */}
+      <ServiceModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        serviceId={selectedServiceId}
+      />
     </footer>
   );
 }
