@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import ServiceModal from "@/components/ui/ServiceModal";
+import ServiceModal from "@/components/models/ServiceModal";
 
 type Service = {
   id: string;

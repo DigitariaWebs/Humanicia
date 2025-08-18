@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import ServiceModal from "@/components/ui/ServiceModal";
+import ServiceModal from "@/components/models/ServiceModal";
 
 function FooterLink({
   href,

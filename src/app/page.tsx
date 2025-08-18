@@ -9,10 +9,12 @@ import ContactSection from "@/components/sections/ContactSection";
 import Footer from "@/components/layout/Footer";
 import InfiniteSlider from "@/components/ui/InfiniteSlider";
 import ClarifySection from "@/components/sections/ClarifySection";
+import PromotionalBanner from "@/components/ui/PromotionalBanner";
 
 export default function Home() {
   return (
     <main>
+      <PromotionalBanner />
       <Header />
       <HeroSection />
       <AboutSection />
