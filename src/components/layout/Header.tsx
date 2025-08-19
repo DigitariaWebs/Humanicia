@@ -5,18 +5,37 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import { motion } from "framer-motion";
 import { useModal } from "@/components/providers/ModalProvider";
+import { ChevronDown, Sparkles } from "lucide-react";
 
 const MotionLink = motion.create(Link);
 
 type NavItem = {
   label: string;
   href: string;
+  isDropdown?: boolean;
+  dropdownItems?: { label: string; href: string; description: string }[];
 };
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Accueil", href: "/" },
   { label: "À propos", href: "/apropre" },
-  { label: "Services", href: "/#services" },
+  {
+    label: "Services",
+    href: "/#services",
+    isDropdown: true,
+    dropdownItems: [
+      {
+        label: "Nos 4 Services",
+        href: "/#services",
+        description: "Découvrez nos services de compagnie",
+      },
+      {
+        label: "Les Forfaits Mensuels",
+        href: "/#pricing",
+        description: "Tarifs et abonnements",
+      },
+    ],
+  },
   { label: "Agents", href: "/agent" },
   { label: "Contact", href: "/#contact" },
 ];
@@ -25,6 +44,9 @@ export default function Header() {
   const pathname = usePathname();
   const { openModal } = useModal();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [servicesDropdownOpen, setServicesDropdownOpen] = React.useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = React.useState(false);
+  const dropdownTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   // Track which in-page section is active on the homepage
   const [activeSectionId, setActiveSectionId] = React.useState<string | null>(
@@ -79,6 +101,14 @@ export default function Header() {
 
     return () => observer.disconnect();
   }, [pathname, sectionIds]);
+
+  React.useEffect(() => {
+    return () => {
+      if (dropdownTimeoutRef.current) {
+        clearTimeout(dropdownTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const isActive = (href: string): boolean => {
     if (href === "/") {
@@ -142,41 +172,100 @@ export default function Header() {
             <nav className="hidden md:flex flex-1 items-center justify-center overflow-x-auto">
               <ul className="flex items-center gap-8">
                 {NAV_ITEMS.map((item) => (
-                  <li key={item.href}>
-                    <MotionLink
-                      href={item.href}
-                      className={[
-                        "text-base rounded-md px-2 py-1 transition-colors",
-                        isActive(item.href) ? "font-semibold" : "",
-                      ].join(" ")}
-                      style={{
-                        color: isActive(item.href)
-                          ? "var(--color-brand)"
-                          : "color-mix(in oklab, var(--color-brand) 60%, white)",
-                        backgroundColor: "transparent",
-                      }}
-                      onClick={() => {
-                        if (item.href === "/") {
-                          setActiveSectionId(null);
-                        } else if (item.href.startsWith("/#")) {
-                          const id = item.href.split("#")[1] || "";
-                          setActiveSectionId(id);
-                        }
-                      }}
-                      whileHover={{
-                        y: -2,
-                        color: "var(--color-cta)",
-                        backgroundColor:
-                          "color-mix(in oklab, var(--color-cta) 14%, white)",
-                      }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 300,
-                        damping: 18,
-                      }}
-                    >
-                      {item.label}
-                    </MotionLink>
+                  <li key={item.href} className="relative">
+                    {item.isDropdown ? (
+                      <div
+                        className="relative"
+                        onMouseEnter={() => {
+                          if (dropdownTimeoutRef.current) {
+                            clearTimeout(dropdownTimeoutRef.current);
+                          }
+                          setServicesDropdownOpen(true);
+                        }}
+                        onMouseLeave={() => {
+                          dropdownTimeoutRef.current = setTimeout(() => {
+                            setServicesDropdownOpen(false);
+                          }, 200);
+                        }}
+                      >
+                        <motion.button
+                          className={[
+                            "text-base rounded-md px-3 py-2 transition-all duration-300 flex items-center gap-1 font-semibold relative overflow-hidden",
+                            isActive(item.href) ? "font-bold" : "",
+                          ].join(" ")}
+                          style={{
+                            color: isActive(item.href)
+                              ? "var(--color-brand)"
+                              : "color-mix(in oklab, var(--color-brand) 60%, white)",
+                            backgroundColor: servicesDropdownOpen
+                              ? "var(--color-cta)"
+                              : "transparent",
+                          }}
+                          whileHover={{
+                            y: -2,
+                            color: "white",
+                            backgroundColor: "var(--color-cta)",
+                            scale: 1.05,
+                          }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 18,
+                          }}
+                        >
+                          <Sparkles className="w-4 h-4" />
+                          {item.label}
+                          <ChevronDown
+                            className={`w-4 h-4 transition-transform duration-300 ${
+                              servicesDropdownOpen ? "rotate-180" : ""
+                            }`}
+                          />
+                          {/* Animated background */}
+                          <motion.div
+                            className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 opacity-0"
+                            animate={{
+                              opacity: servicesDropdownOpen ? 0.1 : 0,
+                            }}
+                            transition={{ duration: 0.3 }}
+                          />
+                        </motion.button>
+                      </div>
+                    ) : (
+                      <MotionLink
+                        href={item.href}
+                        className={[
+                          "text-base rounded-md px-2 py-1 transition-colors",
+                          isActive(item.href) ? "font-semibold" : "",
+                        ].join(" ")}
+                        style={{
+                          color: isActive(item.href)
+                            ? "var(--color-brand)"
+                            : "color-mix(in oklab, var(--color-brand) 60%, white)",
+                          backgroundColor: "transparent",
+                        }}
+                        onClick={() => {
+                          if (item.href === "/") {
+                            setActiveSectionId(null);
+                          } else if (item.href.startsWith("/#")) {
+                            const id = item.href.split("#")[1] || "";
+                            setActiveSectionId(id);
+                          }
+                        }}
+                        whileHover={{
+                          y: -2,
+                          color: "var(--color-cta)",
+                          backgroundColor:
+                            "color-mix(in oklab, var(--color-cta) 14%, white)",
+                        }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 18,
+                        }}
+                      >
+                        {item.label}
+                      </MotionLink>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -205,26 +294,93 @@ export default function Header() {
               <ul className="grid gap-2">
                 {NAV_ITEMS.map((item) => (
                   <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className="block rounded-md px-3 py-2 text-base"
-                      style={{
-                        color: isActive(item.href)
-                          ? "var(--color-brand)"
-                          : "color-mix(in oklab, var(--color-brand) 70%, white)",
-                      }}
-                      onClick={() => {
-                        setMobileOpen(false);
-                        if (item.href === "/") {
-                          setActiveSectionId(null);
-                        } else if (item.href.startsWith("/#")) {
-                          const id = item.href.split("#")[1] || "";
-                          setActiveSectionId(id);
-                        }
-                      }}
-                    >
-                      {item.label}
-                    </Link>
+                    {item.isDropdown ? (
+                      <div>
+                        <button
+                          onClick={() =>
+                            setMobileServicesOpen(!mobileServicesOpen)
+                          }
+                          className="w-full flex items-center justify-between rounded-md px-3 py-2 text-base font-semibold"
+                          style={{
+                            color: isActive(item.href)
+                              ? "var(--color-brand)"
+                              : "color-mix(in oklab, var(--color-brand) 70%, white)",
+                          }}
+                        >
+                          <div className="flex items-center gap-2">
+                            <Sparkles className="w-4 h-4" />
+                            {item.label}
+                          </div>
+                          <ChevronDown
+                            className={`w-4 h-4 transition-transform duration-300 ${
+                              mobileServicesOpen ? "rotate-180" : ""
+                            }`}
+                          />
+                        </button>
+
+                        {mobileServicesOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="ml-4 mt-2 space-y-1"
+                          >
+                            {item.dropdownItems?.map((dropdownItem, index) => (
+                              <motion.div
+                                key={dropdownItem.href}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: index * 0.1 }}
+                              >
+                                <Link
+                                  href={dropdownItem.href}
+                                  className="block rounded-md px-3 py-2 text-sm bg-gray-50 hover:bg-gray-100 transition-colors"
+                                  style={{ color: "var(--color-brand)" }}
+                                  onClick={() => {
+                                    setMobileOpen(false);
+                                    setMobileServicesOpen(false);
+                                    if (dropdownItem.href.startsWith("/#")) {
+                                      const id =
+                                        dropdownItem.href.split("#")[1] || "";
+                                      setActiveSectionId(id);
+                                    }
+                                  }}
+                                >
+                                  <div className="font-medium">
+                                    {dropdownItem.label}
+                                  </div>
+                                  <div className="text-xs text-gray-500 mt-1">
+                                    {dropdownItem.description}
+                                  </div>
+                                </Link>
+                              </motion.div>
+                            ))}
+                          </motion.div>
+                        )}
+                      </div>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        className="block rounded-md px-3 py-2 text-base"
+                        style={{
+                          color: isActive(item.href)
+                            ? "var(--color-brand)"
+                            : "color-mix(in oklab, var(--color-brand) 70%, white)",
+                        }}
+                        onClick={() => {
+                          setMobileOpen(false);
+                          if (item.href === "/") {
+                            setActiveSectionId(null);
+                          } else if (item.href.startsWith("/#")) {
+                            const id = item.href.split("#")[1] || "";
+                            setActiveSectionId(id);
+                          }
+                        }}
+                      >
+                        {item.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
                 <li className="pt-1">
@@ -244,6 +400,65 @@ export default function Header() {
           </div>
         )}
       </header>
+
+      {/* Services dropdown - positioned outside header */}
+      {servicesDropdownOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: -5 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -5 }}
+          transition={{ duration: 0.2 }}
+          className="fixed w-56 bg-white rounded-lg shadow-lg border border-gray-200"
+          style={{
+            zIndex: 9999,
+            top: "88px",
+            left: "50%",
+            transform: "translateX(-50%)",
+          }}
+          onMouseEnter={() => {
+            if (dropdownTimeoutRef.current) {
+              clearTimeout(dropdownTimeoutRef.current);
+            }
+            setServicesDropdownOpen(true);
+          }}
+          onMouseLeave={() => {
+            dropdownTimeoutRef.current = setTimeout(() => {
+              setServicesDropdownOpen(false);
+            }, 200);
+          }}
+        >
+          <div className="py-2">
+            <Link
+              href="/#services"
+              className="block px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+              onClick={() => {
+                setServicesDropdownOpen(false);
+                setActiveSectionId("services");
+              }}
+            >
+              <div className="font-medium">Nos 4 Services</div>
+              <div className="text-sm text-gray-500 mt-1">
+                Découvrez nos services
+              </div>
+            </Link>
+
+            <Link
+              href="/#pricing"
+              className="block px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+              onClick={() => {
+                setServicesDropdownOpen(false);
+                setActiveSectionId("pricing");
+              }}
+            >
+              <div className="font-medium">Les Forfaits Mensuels</div>
+              <div className="text-sm text-gray-500 mt-1">
+                Tarifs et abonnements
+              </div>
+            </Link>
+          </div>
+        </motion.div>
+      )}
+
       <div aria-hidden className="h-20 w-full" />
     </>
   );
