@@ -167,6 +167,16 @@ export default function HeroSection() {
             <span className="sm:hidden">Rencontre</span>
             <span className="hidden sm:inline">Planifier une rencontre</span>
           </Link>
+
+          <Link
+            href="#services"
+            className="px-3 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold ring-1 ring-black/5 text-gray-900 text-sm sm:text-base hover:-translate-y-0.5 transition-transform shadow"
+            style={{ background: "var(--color-lavender)" }}
+            aria-label="Découvrir nos services"
+          >
+            <span className="sm:hidden">Services</span>
+            <span className="hidden sm:inline">Découvrir nos services</span>
+          </Link>
         </motion.div>
       </div>
 

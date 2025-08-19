@@ -8,6 +8,15 @@ const nextConfig: NextConfig = {
     "http://192.168.56.1:3000",
     "http://localhost:3000",
   ],
+  
+  // Disable source maps in development to prevent 404 errors
+  productionBrowserSourceMaps: false,
+  
+  // Experimental features for better development
+  experimental: {
+    // Enable better error handling
+    optimizePackageImports: ['framer-motion', 'lucide-react'],
+  },
 };
 
 export default nextConfig;
