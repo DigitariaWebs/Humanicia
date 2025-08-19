@@ -24,7 +24,7 @@ const SERVICES: Service[] = [
   {
     id: "visio",
     title: "Appels visio",
-    subtitle: "Partagez un moment en face à face, à distance",
+    subtitle: "Partagez un moment en face à face, à distance",
     imageSrc: "/ServiceSection/AppelVisio.jpg",
     rotationDeg: 0,
   },
@@ -37,7 +37,7 @@ const SERVICES: Service[] = [
   },
   {
     id: "anonymous",
-    title: "Anonymous Calls",
+    title: "Appels anonymes",
     subtitle: "Discussions confidentielles et anonymes",
     imageSrc: "/ServiceSection/AnonymousCalls.png",
     rotationDeg: -3,
