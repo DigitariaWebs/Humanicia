@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 /* Single, fixed theme (light) */
@@ -34,6 +35,9 @@
     --color-lavender: #d8d9f0;
     --color-clay: #a6c18e;
     --color-slate: #aab7c9;
+
+  /* Fonts */
+    --font-family-base: 'Montserrat', sans-serif;
 }
 
 body {
@@ -45,8 +49,7 @@ body {
       radial-gradient(900px 500px at 110% -10%, color-mix(in oklab, var(--color-mint) 12%, white) 0%, transparent 60%),
       linear-gradient(180deg, var(--color-background) 0%, #fffaf4 70%);
     color: var(--color-text);
-    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
-        Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji;
+    font-family: var(--font-family-base);
     scroll-behavior: smooth;
 }
 

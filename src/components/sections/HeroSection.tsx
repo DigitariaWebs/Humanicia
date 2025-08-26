@@ -169,8 +169,8 @@ export default function HeroSection() {
 
           <Link
             href="#agents"
-            className="px-3 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold ring-1 ring-black/5 text-gray-900 text-sm sm:text-base hover:-translate-y-0.5 transition-transform shadow"
-            style={{ background: "var(--color-mint)" }}
+            className="px-3 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold text-gray-900 text-sm sm:text-base border border-gray-300 hover:-translate-y-0.5 transition-transform shadow"
+            style={{ background: "#f9f9f9" }}
             aria-label="Parler avec un agent"
           >
             <span className="sm:hidden">Parler</span>
@@ -179,8 +179,8 @@ export default function HeroSection() {
 
           <Link
             href="#contact"
-            className="px-3 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold ring-1 ring-black/5 text-gray-900 text-sm sm:text-base hover:-translate-y-0.5 transition-transform shadow"
-            style={{ background: "var(--color-sky)" }}
+            className="px-3 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold text-gray-900 text-sm sm:text-base border border-gray-300 hover:-translate-y-0.5 transition-transform shadow"
+            style={{ background: "#f9f9f9" }}
             aria-label="Planifier une rencontre"
           >
             <span className="sm:hidden">Rencontre</span>
@@ -189,8 +189,8 @@ export default function HeroSection() {
 
           <Link
             href="#services"
-            className="px-3 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold ring-1 ring-black/5 text-gray-900 text-sm sm:text-base hover:-translate-y-0.5 transition-transform shadow"
-            style={{ background: "var(--color-lavender)" }}
+            className="px-3 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold text-gray-900 text-sm sm:text-base border border-gray-300 hover:-translate-y-0.5 transition-transform shadow"
+            style={{ background: "#f9f9f9" }}
             aria-label="Découvrir nos services"
           >
             <span className="sm:hidden">Services</span>
