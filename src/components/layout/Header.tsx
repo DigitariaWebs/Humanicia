@@ -110,6 +110,23 @@ export default function Header() {
     };
   }, []);
 
+  // Ensure header is anchored to the top and remove any leftover top padding added by other scripts
+  React.useEffect(() => {
+    const headerEl = document.querySelector("header");
+    try {
+      if (headerEl) {
+        headerEl.style.top = "0px";
+      }
+      if (typeof document !== "undefined" && document.body) {
+        // Clear any stray top padding that might push content down
+        document.body.style.paddingTop = "0px";
+      }
+    } catch {
+      // ignore DOM manipulation errors in non-browser environments
+    }
+    // Intentionally not reverting changes on unmount to keep header at top
+  }, []);
+
   const isActive = (href: string): boolean => {
     if (href === "/") {
       // On home, highlight Accueil only when no section is active

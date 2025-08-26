@@ -62,6 +62,7 @@ export default function ChatWidget() {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
+  const [bannerOffset, setBannerOffset] = useState(0);
 
   useEffect(() => {
     const saved =
@@ -76,6 +77,38 @@ export default function ChatWidget() {
       localStorage.setItem("chat:open", isOpen ? "1" : "0");
     }
   }, [isOpen]);
+
+  // Observe the promotional banner and update bottom offset so chat floats above it
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const banner = document.getElementById("promotional-banner");
+
+    function update() {
+      if (banner) {
+        const rect = banner.getBoundingClientRect();
+        // When fixed at bottom, height is the visible height
+        setBannerOffset(Math.ceil(rect.height));
+      } else {
+        setBannerOffset(0);
+      }
+    }
+
+    update();
+
+    const GlobalResizeObserver = (window as Window & typeof globalThis)
+      .ResizeObserver;
+    const ro = GlobalResizeObserver ? new GlobalResizeObserver(update) : null;
+    if (ro && banner) ro.observe(banner);
+
+    // Also watch for DOM changes in case banner is mounted/unmounted
+    const mo = new MutationObserver(update);
+    mo.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      if (ro && banner) ro.disconnect();
+      mo.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -132,7 +165,8 @@ export default function ChatWidget() {
         ref={buttonRef}
         aria-label={isOpen ? "Close helper" : "Open helper"}
         onClick={() => setIsOpen((v) => !v)}
-        className="fixed bottom-4 right-4 z-50 rounded-full bg-[var(--color-brand)] text-white shadow-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-600 h-12 w-12 grid place-items-center"
+        style={{ bottom: `${4 + bannerOffset}px` }}
+        className="fixed right-4 z-50 rounded-full bg-[var(--color-brand)] text-white shadow-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-600 h-12 w-12 grid place-items-center"
       >
         {/* Simple chat icon */}
         <svg
@@ -153,7 +187,8 @@ export default function ChatWidget() {
       {isOpen && (
         <div
           ref={panelRef}
-          className="fixed bottom-20 right-4 z-50 w-[340px] max-w-[88vw] rounded-2xl bg-white shadow-xl border border-[var(--color-border)]"
+          style={{ bottom: `${20 + bannerOffset}px` }}
+          className="fixed right-4 z-50 w-[340px] max-w-[88vw] rounded-2xl bg-white shadow-xl border border-[var(--color-border)]"
         >
           <div className="flex items-center justify-between px-4 py-3 rounded-t-2xl bg-[var(--color-brand)] text-white">
             <div className="font-semibold">Humanicia helper</div>
