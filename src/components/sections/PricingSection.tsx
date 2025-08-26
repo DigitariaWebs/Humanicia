@@ -1,44 +1,84 @@
-"use client";
+import React from "react";
 
-import { motion } from "framer-motion";
-import { useState } from "react";
-import { CheckCircle, Star, Users, Heart, Zap } from "lucide-react";
+// Small inline icons to avoid extra dependencies
+const IconHeart = ({ className = "" }: { className?: string }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden
+  >
+    <path d="M12 21s-7.5-4.738-10-8.01C-0.5 8.38 3.2 4 7 6.5 8.8 7.9 12 11 12 11s3.2-3.1 5-4.5c3.8-2.5 7.5 1.88 5 6.49C19.5 16.262 12 21 12 21z" />
+  </svg>
+);
 
-type PricingPlan = {
-  id: string;
+const IconSparkles = ({ className = "" }: { className?: string }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden
+  >
+    <path d="M12 2l1.5 3.5L17 7l-3.5 1.5L12 12l-1.5-3.5L7 7l3.5-1.5L12 2zM4 14l1 2 2 1-2 1-1 2-1-2L1 18l2-1 1-2zM20 14l1 2 2 1-2 1-1 2-1-2-2-1 2-1 1-2z" />
+  </svg>
+);
+
+const IconStar = ({ className = "" }: { className?: string }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden
+  >
+    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+  </svg>
+);
+
+const IconUsers = ({ className = "" }: { className?: string }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden
+  >
+    <path d="M16 11c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zM8 11c1.66 0 3-1.34 3-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V20h14v-3.5C15 14.17 10.33 13 8 13zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V20h6v-3.5C23 14.17 18.33 13 16 13z" />
+  </svg>
+);
+
+type Plan = {
   name: string;
   price: string;
+  frequency?: string;
   description: string;
   features: string[];
-  icon: React.ComponentType<{ className?: string }>;
-  popular?: boolean;
-  color: string;
-  bgColor: string;
+  badge?: string;
 };
 
-const PRICING_PLANS: PricingPlan[] = [
+const plans: Plan[] = [
   {
-    id: "serenite",
     name: "Forfait Sérénité",
-    price: "120 $",
+    price: "$120",
+    frequency: "/ mois",
     description:
       "Un rendez-vous doux et régulier, juste pour souffler et garder le contact.",
     features: [
       "1 appel (vocal ou visio) par semaine",
-      "4 appels par mois",
+      "Environ 4 appels par mois",
       "Support par message",
       "Flexibilité d'horaire",
     ],
-    icon: Heart,
-    color: "text-emerald-600",
-    bgColor: "bg-emerald-50",
   },
   {
-    id: "compagnie",
     name: "Forfait Compagnie",
-    price: "280 $",
+    price: "$280",
+    frequency: "/ mois",
     description:
       "Pour briser la solitude de façon continue et bâtir une vraie relation.",
+    badge: "Le plus populaire",
     features: [
       "2 à 3 appels (vocaux ou visio) chaque semaine",
       "Environ 10 appels par mois",
@@ -46,15 +86,11 @@ const PRICING_PLANS: PricingPlan[] = [
       "Suivi personnalisé",
       "Activités suggérées",
     ],
-    icon: Users,
-    popular: true,
-    color: "text-orange-600",
-    bgColor: "bg-orange-50",
   },
   {
-    id: "presence",
     name: "Forfait Présence",
-    price: "320 $",
+    price: "$360",
+    frequency: "/ mois",
     description:
       "L'équilibre parfait entre la chaleur d'une voix et la force d'une présence réelle.",
     features: [
@@ -64,202 +100,98 @@ const PRICING_PLANS: PricingPlan[] = [
       "Plan personnalisé",
       "Accès aux événements",
     ],
-    icon: Star,
-    color: "text-purple-600",
-    bgColor: "bg-purple-50",
   },
   {
-    id: "sur-mesure",
-    name: "Forfait Sur-Mesure",
-    price: "Prix adapté",
+    name: "Rôle sur mesure",
+    price: "À partir de $500",
     description:
-      "On construit ton plan ensemble, selon tes envies et ton rythme.",
+      "Un service haut de gamme assuré par un membre de l'équipe Humanicia pour occasions spéciales.",
     features: [
-      "Mélange flexible d'appels, visio et activités",
-      "Plan personnalisé selon tes besoins",
-      "Support dédié",
-      "Flexibilité maximale",
-      "Évaluation continue",
+      "Demi‑journée (4 h) — $500",
+      "Journée (8 h) — $900",
+      "Demande spéciale / forfait personnalisé — tarif sur mesure",
+      "Personnel sélectionné et de confiance",
+      "Service construit avec le client selon ses besoins",
     ],
-    icon: Zap,
-    color: "text-blue-600",
-    bgColor: "bg-blue-50",
   },
 ];
 
 export default function PricingSection() {
-  const [hoveredPlan, setHoveredPlan] = useState<string | null>(null);
-
   return (
-    <section
-      id="pricing"
-      aria-label="Forfaits mensuels"
-      className="relative pt-24 md:pt-28 lg:pt-32 pb-24 md:pb-28 lg:pb-32"
-    >
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-emerald-100/40 to-orange-100/40 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-purple-100/40 to-blue-100/40 rounded-full blur-3xl" />
-      </div>
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-16 md:mb-20">
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-sm font-semibold"
-            style={{ color: "var(--color-cta)" }}
-          >
-            Forfaits mensuels Humanicia
-          </motion.p>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="mt-2 text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight"
-            style={{ color: "var(--color-brand)" }}
-          >
-            Choisis le rythme de lien qui te fait du bien
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-4 text-lg md:text-xl text-gray-600 max-w-3xl mx-auto"
-          >
-            Humanicia s&apos;adapte à ton quotidien pour créer des connexions
-            authentiques et bienveillantes.
-          </motion.p>
+    <section id="pricing" className="py-16">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="text-center mb-10">
+          <h2 className="text-6xl font-cinzel font-extrabold text-[var(--color-brand)]">
+            Nos Offres
+          </h2>
+          <p className="text-[var(--color-cta)] mt-2 text-md font-semibold">
+            Choisissez le soutien qui vous ressemble.
+          </p>
         </div>
 
-        {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
-          {PRICING_PLANS.map((plan, index) => (
-            <motion.div
-              key={plan.id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{
-                duration: 0.6,
-                ease: "easeOut",
-                delay: index * 0.1,
-              }}
-              whileHover={{ y: -8 }}
-              onHoverStart={() => setHoveredPlan(plan.id)}
-              onHoverEnd={() => setHoveredPlan(null)}
-              className={`relative group ${plan.popular ? "lg:scale-105" : ""}`}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative">
+          {plans.map((plan, idx) => (
+            <div
+              key={plan.name}
+              className={`relative rounded-2xl p-6 border shadow-lg flex flex-col bg-[var(--color-background)] border-[var(--color-border)]`}
             >
-              {/* Popular badge */}
-              {plan.popular && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                  <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-1 rounded-full text-sm font-semibold shadow-lg">
-                    🌟 Le plus populaire
-                  </div>
+              {plan.badge && (
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-[var(--color-cta)] text-white px-3 py-1 rounded-full text-sm font-semibold">
+                  {plan.badge}
                 </div>
               )}
 
-              {/* Card */}
-              <div
-                className={`
-                 relative h-full p-6 md:p-8 rounded-2xl border-2 transition-all duration-300 flex flex-col
-                 ${
-                   plan.popular
-                     ? "border-orange-200 bg-white shadow-xl shadow-orange-100/50"
-                     : "border-gray-200 bg-white shadow-lg hover:shadow-xl"
-                 }
-                 ${
-                   hoveredPlan === plan.id ? "border-orange-300 shadow-2xl" : ""
-                 }
-               `}
-              >
-                {/* Content */}
-                <div className="flex-1">
-                  {/* Icon */}
-                  <div
-                    className={`
-                     w-12 h-12 rounded-xl flex items-center justify-center mb-6
-                     ${plan.bgColor} ${plan.color}
-                   `}
-                  >
-                    <plan.icon className="w-6 h-6" />
-                  </div>
-
-                  {/* Plan name */}
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
-                    {plan.name}
-                  </h3>
-
-                  {/* Price */}
-                  <div className="mb-4">
-                    <span className="text-3xl md:text-4xl font-bold text-gray-900">
-                      {plan.price}
-                    </span>
-                    {plan.id !== "sur-mesure" && (
-                      <span className="text-gray-500 ml-1">/mois</span>
-                    )}
-                  </div>
-
-                  {/* Description */}
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    {plan.description}
-                  </p>
-
-                  {/* Features */}
-                  <ul className="space-y-3">
-                    {plan.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-start">
-                        <CheckCircle className="w-5 h-5 text-emerald-500 mt-0.5 mr-3 flex-shrink-0" />
-                        <span className="text-gray-700">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
+              <div className="text-center mb-4">
+                <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-[var(--color-border)] flex items-center justify-center border border-[var(--color-brand-muted)]">
+                  {idx === 0 ? (
+                    <IconHeart className="w-6 h-6 text-[var(--color-brand)]" />
+                  ) : idx === 1 ? (
+                    <IconStar className="w-6 h-6 text-[var(--color-brand)]" />
+                  ) : idx === 2 ? (
+                    <IconUsers className="w-6 h-6 text-[var(--color-brand-muted)]" />
+                  ) : (
+                    <IconSparkles className="w-6 h-6 text-[var(--color-brand-muted)]" />
+                  )}
                 </div>
 
-                {/* CTA Button - Always at bottom */}
-                <div className="mt-8">
-                  <button
-                    className={`
-                     w-full py-3 px-6 rounded-xl font-semibold transition-all duration-300 cursor-pointer
-                     ${
-                       plan.popular
-                         ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 shadow-lg hover:shadow-xl"
-                         : "bg-gray-100 text-gray-900 hover:bg-gray-200"
-                     }
-                     transform hover:scale-105 active:scale-95
-                   `}
-                  >
-                    {plan.id === "sur-mesure"
-                      ? "Nous contacter"
-                      : "Choisir ce forfait"}
-                  </button>
+                <h3 className="font-cinzel text-xl font-bold text-[var(--color-brand)]">
+                  {plan.name}
+                </h3>
+                <p className="text-sm text-[var(--color-muted)] mt-1 h-12 flex items-center justify-center">
+                  {plan.description}
+                </p>
+              </div>
+
+              <div className="text-center mb-6">
+                <div className="text-3xl font-cinzel font-bold text-[var(--color-text)]">
+                  {plan.price}
+                  {plan.frequency && (
+                    <span className="text-base font-medium text-[var(--color-muted)] ml-1">
+                      {plan.frequency}
+                    </span>
+                  )}
                 </div>
               </div>
-            </motion.div>
+
+              <ul className="space-y-3 mb-6 flex-grow text-sm text-[var(--color-text)]">
+                {plan.features.map((f, i) => (
+                  <li key={i} className="flex items-start">
+                    <IconSparkles className="w-4 h-4 mr-3 text-[var(--color-brand-muted)] mt-0.5 flex-shrink-0" />
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <a
+                href="#contact"
+                className="w-full mt-2 inline-block text-center bg-[var(--color-cta)] text-white px-4 py-3 rounded-lg font-semibold hover:bg-[var(--color-cta-hover)] active:bg-[var(--color-cta-active)]"
+                aria-label={`Choisir ${plan.name}`}
+              >
+                Choisir
+              </a>
+            </div>
           ))}
         </div>
-
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="text-center mt-16"
-        >
-          <p className="text-gray-600 mb-6">
-            Pas sûr de quel forfait choisir ? Contactez-nous pour une
-            consultation gratuite.
-          </p>
-          <button className="inline-flex items-center px-8 py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl cursor-pointer">
-            Consultation gratuite
-          </button>
-        </motion.div>
       </div>
     </section>
   );

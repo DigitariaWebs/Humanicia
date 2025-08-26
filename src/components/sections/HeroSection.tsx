@@ -111,8 +111,27 @@ export default function HeroSection() {
         >
           Humanicia
         </motion.h1>
+        {/* Prominent slogan near the site name */}
+        <motion.div
+          className="mt-3"
+          initial={{ opacity: 0, y: 6 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, ease: "easeOut", delay: 0.05 }}
+        >
+          <span
+            className="inline-block text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight"
+            style={{
+              color: "var(--color-cta)",
+              textShadow: "0 2px 8px rgba(0,0,0,0.06)",
+            }}
+            aria-label="Slogan: Du lien, du vrai"
+          >
+            Du lien, du vrai
+          </span>
+        </motion.div>
         <motion.p
-          className="mt-4 text-sm sm:text-[15px] md:text-base leading-relaxed"
+          className="mt-4 text-sm sm:text-[15px] md:text-lg leading-relaxed"
           style={{ color: "var(--color-muted)" }}
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -221,7 +240,7 @@ export default function HeroSection() {
                       src={item.src}
                       alt={item.alt}
                       fill
-                      className="object-cover object-center transition-transform duration-300 ease-out group-hover:scale-[1.02] rotate-180"
+                      className="object-cover object-center transition-transform duration-300 ease-out group-hover:scale-[1.02]"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 45vw, 560px"
                       priority={colIdx === 0 && itemIdx === 0}
                     />

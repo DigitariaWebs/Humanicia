@@ -54,10 +54,10 @@ const SERVICE_DETAILS: ServiceInfo[] = [
     imageSrc: "/ServiceSection/ActivitesPresence.jpg",
     pricing: "dès 90 $ / h",
     description: "Une présence dédiée, pensée pour toi.",
-    features: [
+      features: [
       "Être accompagné à un mariage ou une sortie.",
       "Partager une marche, un café ou un repas.",
-      "Un moment sur mesure, où les possibilités sont infinies.",
+      "Service haut de gamme sur mesure, construit avec le client selon ses besoins.",
     ],
   },
 ];
