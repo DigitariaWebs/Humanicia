@@ -149,44 +149,24 @@ export default function Header() {
         {/* Main navigation row */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            className="h-20 flex items-center justify-between"
+            className="h-20 flex items-center"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
           >
-            {/* Mobile menu toggle (phones) aligned right */}
-            <div className="w-12 flex md:hidden ml-auto">
-              <button
-                type="button"
-                aria-label={mobileOpen ? "Close menu" : "Open menu"}
-                onClick={() => setMobileOpen((v) => !v)}
-                className="inline-flex items-center justify-center h-10 w-10 rounded-md ring-1 ring-black/5 bg-white/70 backdrop-blur"
-              >
-                {mobileOpen ? (
-                  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden>
-                    <path
-                      d="M6 6l12 12M18 6L6 18"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                ) : (
-                  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden>
-                    <path
-                      d="M4 7h16M4 12h16M4 17h16"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                )}
-              </button>
+            {/* Logo - Left */}
+            <div className="flex items-center flex-shrink-0">
+              <Link href="/" className="flex items-center gap-2">
+                <img
+                  src="/Logo.png"
+                  alt="Humanicia Logo"
+                  className="h-8 w-auto"
+                />
+              </Link>
             </div>
-            <div className="w-24 hidden md:block" />
 
-            {/* Centered nav */}
-            <nav className="hidden md:flex flex-1 items-center justify-center overflow-x-auto">
+            {/* Centered nav - Desktop only */}
+            <nav className="hidden md:flex flex-1 items-center justify-center overflow-x-auto mx-8">
               <ul className="flex items-center gap-8">
                 {NAV_ITEMS.map((item) => (
                   <li key={item.href} className="relative">
@@ -288,14 +268,44 @@ export default function Header() {
               </ul>
             </nav>
 
-            {/* CTA button */}
-            <div className="w-24 hidden md:flex justify-end">
+            {/* CTA button - Right (Desktop) */}
+            <div className="hidden md:flex items-center flex-shrink-0">
               <button
                 onClick={() => openModal("consultation")}
                 className="inline-flex items-center rounded-full px-4 py-2 text-white text-sm font-semibold shadow-sm focus:outline-none focus-visible:ring-2"
                 style={{ backgroundColor: "var(--color-cta)" }}
               >
                 Rejoindre
+              </button>
+            </div>
+
+            {/* Mobile menu toggle - Right (Mobile only) */}
+            <div className="flex md:hidden ml-auto">
+              <button
+                type="button"
+                aria-label={mobileOpen ? "Close menu" : "Open menu"}
+                onClick={() => setMobileOpen((v) => !v)}
+                className="inline-flex items-center justify-center h-10 w-10 rounded-md ring-1 ring-black/5 bg-white/70 backdrop-blur"
+              >
+                {mobileOpen ? (
+                  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden>
+                    <path
+                      d="M6 6l12 12M18 6L6 18"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden>
+                    <path
+                      d="M4 7h16M4 12h16M4 17h16"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                )}
               </button>
             </div>
           </motion.div>
