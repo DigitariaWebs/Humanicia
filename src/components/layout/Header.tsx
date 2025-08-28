@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { motion } from "framer-motion";
@@ -157,9 +158,11 @@ export default function Header() {
             {/* Logo - Left */}
             <div className="flex items-center flex-shrink-0">
               <Link href="/" className="flex items-center gap-2">
-                <img
+                <Image
                   src="/Logo.png"
                   alt="Humanicia Logo"
+                  width={32}
+                  height={32}
                   className="h-8 w-auto"
                 />
               </Link>

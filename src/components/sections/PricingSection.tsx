@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { useModal } from "../providers/ModalProvider";
 
 // Small inline icons to avoid extra dependencies
 const IconHeart = ({ className = "" }: { className?: string }) => (
@@ -117,6 +120,10 @@ const plans: Plan[] = [
 ];
 
 export default function PricingSection() {
+  const { openModal } = useModal();
+  const regularPlans = plans.slice(0, 3);
+  const premiumPlan = plans[3];
+
   return (
     <section id="pricing" className="py-16">
       <div className="max-w-6xl mx-auto px-4">
@@ -129,8 +136,9 @@ export default function PricingSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative">
-          {plans.map((plan, idx) => (
+        {/* Regular Monthly Plans */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          {regularPlans.map((plan, idx) => (
             <div
               key={plan.name}
               className={`relative rounded-2xl p-6 border shadow-lg flex flex-col bg-[var(--color-background)] border-[var(--color-border)]`}
@@ -147,10 +155,8 @@ export default function PricingSection() {
                     <IconHeart className="w-6 h-6 text-[var(--color-brand)]" />
                   ) : idx === 1 ? (
                     <IconStar className="w-6 h-6 text-[var(--color-brand)]" />
-                  ) : idx === 2 ? (
-                    <IconUsers className="w-6 h-6 text-[var(--color-brand-muted)]" />
                   ) : (
-                    <IconSparkles className="w-6 h-6 text-[var(--color-brand-muted)]" />
+                    <IconUsers className="w-6 h-6 text-[var(--color-brand-muted)]" />
                   )}
                 </div>
 
@@ -182,15 +188,140 @@ export default function PricingSection() {
                 ))}
               </ul>
 
-              <a
-                href="#contact"
+              <button
+                onClick={() => openModal("service", { serviceName: plan.name })}
                 className="w-full mt-2 inline-block text-center bg-[var(--color-cta)] text-white px-4 py-3 rounded-lg font-semibold hover:bg-[var(--color-cta-hover)] active:bg-[var(--color-cta-active)]"
                 aria-label={`Choisir ${plan.name}`}
               >
                 Choisir
-              </a>
+              </button>
             </div>
           ))}
+        </div>
+
+        {/* Premium Service Section */}
+        <div className="relative mt-24">
+          <div className="max-w-6xl mx-auto">
+            {/* Premium Header */}
+            <div className="text-center mb-16">
+              <div className="inline-block">
+                <span className="text-xs font-semibold text-[var(--color-cta)] uppercase tracking-wider mb-2 block">
+                  Service exclusif
+                </span>
+                <h3 className="text-4xl font-cinzel font-extrabold text-[var(--color-brand)] mb-4">
+                  Rôle sur mesure
+                </h3>
+                <div className="w-16 h-px bg-[var(--color-border)] mx-auto"></div>
+              </div>
+              <p className="text-[var(--color-muted)] text-lg mt-6 max-w-3xl mx-auto leading-relaxed">
+                Pour les moments qui comptent vraiment. Un accompagnement
+                personnalisé, pensé et réalisé selon vos besoins les plus
+                spécifiques.
+              </p>
+            </div>
+
+            {/* Premium Content Layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              {/* Left Column - Description */}
+              <div className="space-y-8">
+                <div>
+                  <h4 className="text-2xl font-cinzel font-bold text-[var(--color-brand)] mb-4">
+                    Une expérience unique
+                  </h4>
+                  <p className="text-[var(--color-muted)] leading-relaxed mb-6">
+                    Chaque projet est une création originale. Nous prenons le
+                    temps de comprendre votre vision, vos attentes, et concevons
+                    un service qui vous ressemble parfaitement.
+                  </p>
+                </div>
+
+                {/* Key Features */}
+                <div className="space-y-4">
+                  <h5 className="font-semibold text-[var(--color-text)] mb-3">
+                    Ce qui vous attend :
+                  </h5>
+                  <div className="space-y-3">
+                    {premiumPlan.features.slice(0, 3).map((feature, i) => (
+                      <div key={i} className="flex items-start gap-3">
+                        <div className="w-2 h-2 rounded-full bg-[var(--color-brand-muted)] mt-2 flex-shrink-0"></div>
+                        <span className="text-[var(--color-text)] text-sm leading-relaxed">
+                          {feature}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column - Pricing Cards */}
+              <div className="space-y-6">
+                {/* Main Pricing Card */}
+                <div className="bg-[var(--color-background)] border border-[var(--color-border)] rounded-xl p-8">
+                  <div className="text-center mb-6">
+                    <div className="text-4xl font-cinzel font-bold text-[var(--color-text)] mb-2">
+                      À partir de $500
+                    </div>
+                    <p className="text-[var(--color-muted)] text-sm">
+                      Tarif adapté à votre projet
+                    </p>
+                  </div>
+
+                  <div className="space-y-4 mb-8">
+                    {premiumPlan.features.slice(3).map((feature, i) => (
+                      <div key={i} className="flex items-center gap-3">
+                        <IconSparkles className="w-4 h-4 text-[var(--color-brand-muted)] flex-shrink-0" />
+                        <span className="text-[var(--color-text)] text-sm">
+                          {feature}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={() =>
+                      openModal("service", { serviceName: "Rôle sur mesure" })
+                    }
+                    className="w-full block text-center bg-[var(--color-cta)] text-white px-6 py-4 rounded-lg font-semibold hover:bg-[var(--color-cta-hover)] active:bg-[var(--color-cta-active)] transition-colors duration-200"
+                    aria-label={`Choisir ${premiumPlan.name}`}
+                  >
+                    Discuter de mon projet
+                  </button>
+                </div>
+
+                {/* Additional Options */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-[var(--color-background)] border border-[var(--color-border)] rounded-lg p-4 text-center">
+                    <div className="font-semibold text-[var(--color-text)] mb-1">
+                      Demi-journée
+                    </div>
+                    <div className="text-lg font-cinzel font-bold text-[var(--color-brand)]">
+                      $500
+                    </div>
+                    <div className="text-xs text-[var(--color-muted)]">
+                      4 heures
+                    </div>
+                  </div>
+                  <div className="bg-[var(--color-background)] border border-[var(--color-border)] rounded-lg p-4 text-center">
+                    <div className="font-semibold text-[var(--color-text)] mb-1">
+                      Journée
+                    </div>
+                    <div className="text-lg font-cinzel font-bold text-[var(--color-brand)]">
+                      $900
+                    </div>
+                    <div className="text-xs text-[var(--color-muted)]">
+                      8 heures
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-center">
+                  <p className="text-xs text-[var(--color-muted)]">
+                    Chaque devis est établi sur mesure • Réponse sous 48h
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

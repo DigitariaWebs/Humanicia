@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import ServiceModal from "@/components/models/ServiceModal";
 
@@ -64,9 +65,11 @@ export default function Footer() {
           {/* Brand + blurb */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-3">
-              <img
+              <Image
                 src="/Logo.png"
                 alt="Humanicia Logo"
+                width={32}
+                height={32}
                 className="h-8 w-auto"
               />
             </div>

@@ -51,6 +51,7 @@ export default function AgentPage() {
                     src="/AgentPage/PhotoPrincipale.jpg"
                     alt="Éric - Fondateur"
                     fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
                     className="object-cover"
                     priority
                   />
@@ -125,8 +126,11 @@ export default function AgentPage() {
                     src="/AgentPage/PhotoSecondaire.png"
                     alt="Maxyme"
                     fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
                     className="object-cover"
-                    priority
+                    loading="lazy"
+                    placeholder="blur"
+                    blurDataURL="/AgentPage/PhotoSecondaireBlur.png"
                   />
                 </div>
               </div>

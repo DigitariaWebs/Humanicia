@@ -171,3 +171,8 @@ section[id],
   animation: none;
 }
 }
+
+/* Button cursor styles */
+button {
+  cursor: pointer;
+}
