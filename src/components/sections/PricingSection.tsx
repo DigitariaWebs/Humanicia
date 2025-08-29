@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { useModal } from "../providers/ModalProvider";
 
 // Small inline icons to avoid extra dependencies
@@ -188,13 +189,19 @@ export default function PricingSection() {
                 ))}
               </ul>
 
-              <button
-                onClick={() => openModal("service", { serviceName: plan.name })}
+              <Link
+                href={
+                  plan.name === "Forfait Sérénité"
+                    ? "/checkout/serenite"
+                    : plan.name === "Forfait Compagnie"
+                    ? "/checkout/compagnie"
+                    : "/checkout/presence"
+                }
                 className="w-full mt-2 inline-block text-center bg-[var(--color-cta)] text-white px-4 py-3 rounded-lg font-semibold hover:bg-[var(--color-cta-hover)] active:bg-[var(--color-cta-active)]"
                 aria-label={`Choisir ${plan.name}`}
               >
                 Choisir
-              </button>
+              </Link>
             </div>
           ))}
         </div>
