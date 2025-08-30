@@ -40,7 +40,7 @@ export default function CheckoutCancel() {
             href="/"
             className="block w-full border border-[var(--color-brand)] text-[var(--color-brand)] py-3 px-6 rounded-lg font-semibold hover:bg-[var(--color-brand)] hover:text-white transition-colors"
           >
-            Retour à l'accueil
+            Retour à l&apos;accueil
           </Link>
         </div>
       </div>

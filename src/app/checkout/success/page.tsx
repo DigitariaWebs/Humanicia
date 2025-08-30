@@ -1,19 +1,17 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-export default function CheckoutSuccess() {
+function CheckoutSuccessContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams?.get('session_id');
-  const [sessionDetails, setSessionDetails] = useState<any>(null);
 
   useEffect(() => {
     if (sessionId) {
       // In a real application, you might want to verify the session with Stripe
       // For now, we'll just show a success message
-      setSessionDetails({ id: sessionId });
     }
   }, [sessionId]);
 
@@ -55,7 +53,7 @@ export default function CheckoutSuccess() {
             href="/"
             className="block w-full bg-[var(--color-brand)] text-white py-3 px-6 rounded-lg font-semibold hover:bg-opacity-90 transition-colors"
           >
-            Retour à l'accueil
+            Retour à l&apos;accueil
           </Link>
 
           <Link
@@ -67,5 +65,13 @@ export default function CheckoutSuccess() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CheckoutSuccess() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CheckoutSuccessContent />
+    </Suspense>
   );
 }

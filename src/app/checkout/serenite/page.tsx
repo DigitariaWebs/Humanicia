@@ -117,7 +117,7 @@ export default function SereniteCheckout() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-[var(--color-text)] mb-2">
-                  Date d'expiration
+                  Date d&apos;expiration
                 </label>
                 <input
                   type="text"

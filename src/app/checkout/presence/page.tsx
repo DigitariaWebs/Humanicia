@@ -62,7 +62,7 @@ export default function PresenceCheckout() {
             $360<span className="text-sm font-normal">/mois</span>
           </p>
           <p className="text-[var(--color-muted)] text-sm mt-2">
-            L'équilibre parfait entre la chaleur d'une voix et la force d'une présence réelle.
+            L&apos;équilibre parfait entre la chaleur d&apos;une voix et la force d&apos;une présence réelle.
           </p>
         </div>
 
@@ -117,7 +117,7 @@ export default function PresenceCheckout() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-[var(--color-text)] mb-2">
-                  Date d'expiration
+                  Date d&apos;expiration
                 </label>
                 <input
                   type="text"
