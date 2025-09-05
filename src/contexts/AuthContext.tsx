@@ -14,6 +14,7 @@ interface AuthContextType {
   signup: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
+  csrfToken: string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -21,7 +22,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 }
@@ -29,6 +30,7 @@ export function useAuth() {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [csrfToken] = useState(() => Math.random().toString(36).substring(2));
 
   useEffect(() => {
     // Check if user is logged in on mount
@@ -37,9 +39,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const checkAuth = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (token) {
-        const response = await fetch('/api/auth/me', {
+        const response = await fetch("/api/auth/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -49,22 +51,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           const data = await response.json();
           setUser(data.user);
         } else {
-          localStorage.removeItem('token');
+          localStorage.removeItem("token");
         }
       }
     } catch (error) {
-      console.error('Auth check failed:', error);
-      localStorage.removeItem('token');
+      console.error("Auth check failed:", error);
+      localStorage.removeItem("token");
     } finally {
       setIsLoading(false);
     }
   };
 
   const login = async (email: string, password: string) => {
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
+    const response = await fetch("/api/auth/login", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ email, password }),
     });
@@ -72,18 +74,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error || 'Login failed');
+      throw new Error(data.error || "Login failed");
     }
 
-    localStorage.setItem('token', data.token);
+    localStorage.setItem("token", data.token);
     setUser(data.user);
   };
 
   const signup = async (name: string, email: string, password: string) => {
-    const response = await fetch('/api/auth/signup', {
-      method: 'POST',
+    const response = await fetch("/api/auth/signup", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ name, email, password }),
     });
@@ -91,15 +93,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error || 'Signup failed');
+      throw new Error(data.error || "Signup failed");
     }
 
-    localStorage.setItem('token', data.token);
+    localStorage.setItem("token", data.token);
     setUser(data.user);
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     setUser(null);
   };
 
@@ -109,6 +111,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signup,
     logout,
     isLoading,
+    csrfToken,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

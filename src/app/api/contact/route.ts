@@ -1,9 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import {
+  sanitizeInput,
+  validateEmail,
+  auditLogger,
+  checkRateLimit,
+} from "@/lib/security";
 
-export const runtime = 'nodejs';
+export const runtime = "nodejs";
 
-type FormType = 'consultation' | 'service' | 'job' | 'partnership';
+type FormType = "consultation" | "service" | "job" | "partnership";
 
 interface ContactFormData {
   name: string;
@@ -16,16 +22,26 @@ interface ContactFormData {
   fileName?: string;
 }
 
-function getSubject({ name, formType, service, serviceName }: { name: string; formType?: FormType; service?: string; serviceName?: string; }) {
+function getSubject({
+  name,
+  formType,
+  service,
+  serviceName,
+}: {
+  name: string;
+  formType?: FormType;
+  service?: string;
+  serviceName?: string;
+}) {
   const svc = service || serviceName;
   switch (formType) {
-    case 'consultation':
+    case "consultation":
       return `Nouvelle demande de consultation de ${name}`;
-    case 'service':
-      return `Nouvelle demande de service: ${svc || 'Service'} de ${name}`;
-    case 'job':
+    case "service":
+      return `Nouvelle demande de service: ${svc || "Service"} de ${name}`;
+    case "job":
       return `Nouvelle candidature de ${name}`;
-    case 'partnership':
+    case "partnership":
       return `Nouvelle demande de partenariat de ${name}`;
     default:
       return `Nouveau contact de ${name}`;
@@ -34,26 +50,94 @@ function getSubject({ name, formType, service, serviceName }: { name: string; fo
 
 export async function POST(request: NextRequest) {
   try {
-    const body = (await request.json()) as ContactFormData;
-    const { name, email, phone, service, details, formType, serviceName, fileName } = body;
+    const clientIP =
+      request.headers.get("x-forwarded-for") ||
+      request.headers.get("x-real-ip") ||
+      "unknown";
 
+    // Check rate limiting for contact form
+    if (!checkRateLimit(`contact_${clientIP}`, 3, 60 * 60 * 1000)) {
+      auditLogger.log({
+        action: 'RATE_LIMIT_EXCEEDED',
+        ip: clientIP,
+        userAgent: request.headers.get('user-agent') || '',
+        details: { endpoint: 'contact' }
+      });
+      return NextResponse.json(
+        { error: 'Too many contact form submissions, please try again later.' },
+        { status: 429 }
+      );
+    }
+
+    const body = (await request.json()) as ContactFormData;
+    const {
+      name,
+      email,
+      phone,
+      service,
+      details,
+      formType,
+      serviceName,
+      fileName,
+    } = body;
+
+    // Validate and sanitize input
     if (!name || !email || !phone) {
       return NextResponse.json(
-        { error: 'Name, email, and phone are required' },
+        { error: "Name, email, and phone are required" },
         { status: 400 }
       );
     }
 
-    const host = process.env.SMTP_HOST || 'smtp.gmail.com';
-    const port = parseInt(process.env.SMTP_PORT || '587', 10);
+    const sanitizedName = sanitizeInput(name);
+    const sanitizedEmail = sanitizeInput(email).toLowerCase();
+    const sanitizedPhone = sanitizeInput(phone);
+    const sanitizedService = service ? sanitizeInput(service) : undefined;
+    const sanitizedDetails = details ? sanitizeInput(details) : undefined;
+    const sanitizedServiceName = serviceName
+      ? sanitizeInput(serviceName)
+      : undefined;
+
+    // Use sanitized details in email processing
+    const processedDetails = sanitizedDetails || 'No additional details provided';
+
+    if (!validateEmail(sanitizedEmail)) {
+      return NextResponse.json(
+        { error: "Invalid email format" },
+        { status: 400 }
+      );
+    }
+
+    // Validate phone number (basic validation)
+    if (sanitizedPhone.length < 10) {
+      return NextResponse.json(
+        { error: "Phone number must be at least 10 characters" },
+        { status: 400 }
+      );
+    }
+
+    auditLogger.log({
+      action: "CONTACT_FORM_SUBMITTED",
+      ip: clientIP,
+      userAgent: request.headers.get("user-agent") || "",
+      details: {
+        email: sanitizedEmail,
+        name: sanitizedName,
+        formType,
+        service: sanitizedService || sanitizedServiceName,
+      },
+    });
+
+    const host = process.env.SMTP_HOST || "smtp.gmail.com";
+    const port = parseInt(process.env.SMTP_PORT || "587", 10);
     const user = process.env.SMTP_USER;
     const pass = process.env.SMTP_PASS;
-    const from = process.env.SMTP_FROM || user || 'no-reply@example.com';
-    const to = process.env.CONTACT_EMAIL || user || '';
+    const from = process.env.SMTP_FROM || user || "no-reply@example.com";
+    const to = process.env.CONTACT_EMAIL || user || "";
 
     if (!user || !pass || !to) {
       return NextResponse.json(
-        { error: 'Email transport not configured on server' },
+        { error: "Email transport not configured on server" },
         { status: 500 }
       );
     }
@@ -66,9 +150,9 @@ export async function POST(request: NextRequest) {
     });
 
     const subject = getSubject({ name, formType, service, serviceName });
-    const brand = '#15803d';
-    const cta = '#f97316';
-    const muted = '#6b7280';
+    const brand = "#15803d";
+    const cta = "#f97316";
+    const muted = "#6b7280";
 
     const html = `
 <!DOCTYPE html>
@@ -108,7 +192,7 @@ export async function POST(request: NextRequest) {
       </div>
       <div class="content">
         <div style="text-align:center; margin-bottom:12px;"> 
-          <span class="badge">${(formType || 'contact').toUpperCase()}</span>
+          <span class="badge">${(formType || "contact").toUpperCase()}</span>
         </div>
         <div class="grid">
           <div class="item">
@@ -123,27 +207,41 @@ export async function POST(request: NextRequest) {
             <div class="label">Téléphone</div>
             <div class="value"><a href="tel:${phone}" style="color:${brand}; text-decoration:none;">${phone}</a></div>
           </div>
-          ${(service || serviceName) ? `
+          ${
+            service || serviceName
+              ? `
           <div class="item">
             <div class="label">Service</div>
             <div class="value">${service || serviceName}</div>
-          </div>` : ''}
-          ${fileName ? `
+          </div>`
+              : ""
+          }
+          ${
+            fileName
+              ? `
           <div class="item">
             <div class="label">Fichier</div>
             <div class="value">${fileName}</div>
-          </div>` : ''}
+          </div>`
+              : ""
+          }
         </div>
 
-        ${details ? `
+        ${
+          processedDetails && processedDetails !== 'No additional details provided'
+            ? `
         <div class="section">
           <h3>Détails</h3>
-          <div class="bubble">${details.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
-        </div>` : ''}
+          <div class="bubble">${processedDetails
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")}</div>
+        </div>`
+            : ""
+        }
 
         <div class="actions">
-          <a class="btn btn-cta" href="mailto:${email}">Répondre par email</a>
-          <a class="btn btn-primary" href="tel:${phone}">Appeler maintenant</a>
+          <a class="btn btn-cta" href="mailto:${sanitizedEmail}">Répondre par email</a>
+          <a class="btn btn-primary" href="tel:${sanitizedPhone}">Appeler maintenant</a>
         </div>
       </div>
       <div class="footer">
@@ -161,11 +259,11 @@ INFORMATIONS CLIENT:
 • Nom: ${name}
 • Email: ${email}
 • Téléphone: ${phone}
-• Type de demande: ${formType || 'contact'}
-${(service || serviceName) ? `• Service: ${service || serviceName}` : ''}
-${fileName ? `• Fichier: ${fileName}` : ''}
+• Type de demande: ${formType || "contact"}
+${service || serviceName ? `• Service: ${service || serviceName}` : ""}
+${fileName ? `• Fichier: ${fileName}` : ""}
 
-${details ? `DÉTAILS:\n${details}\n\n` : ''}PROCHAINES ÉTAPES:
+${details ? `DÉTAILS:\n${details}\n\n` : ""}PROCHAINES ÉTAPES:
 • Répondre dans les 24 heures
 • Email: ${email}
 • Téléphone: ${phone}
@@ -180,10 +278,16 @@ ${details ? `DÉTAILS:\n${details}\n\n` : ''}PROCHAINES ÉTAPES:
       replyTo: email,
     });
 
-    return NextResponse.json({ message: 'Email envoyé avec succès!' }, { status: 200 });
+    return NextResponse.json(
+      { message: "Email envoyé avec succès!" },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error('Error sending email:', error);
-    return NextResponse.json({ error: "Échec de l'envoi de l'email. Veuillez réessayer plus tard." }, { status: 500 });
+    console.error("Error sending email:", error);
+    return NextResponse.json(
+      { error: "Échec de l'envoi de l'email. Veuillez réessayer plus tard." },
+      { status: 500 }
+    );
   }
 }
 
