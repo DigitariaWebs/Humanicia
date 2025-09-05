@@ -161,8 +161,8 @@ export default function Header() {
                 <Image
                   src="/Logo.png"
                   alt="Humanicia Logo"
-                  width={32}
-                  height={32}
+                  width={428}
+                  height={428}
                   className="h-8 w-auto"
                 />
               </Link>
