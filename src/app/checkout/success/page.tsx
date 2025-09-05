@@ -44,17 +44,19 @@ function CheckoutSuccessContent() {
 
         <div className="space-y-3">
           <Link
-            href="/"
+            href="https://calendly.com/your-calendly-link" // Replace with your actual Calendly link
+            target="_blank"
+            rel="noopener noreferrer"
             className="block w-full bg-[var(--color-brand)] text-white py-3 px-6 rounded-lg font-semibold hover:bg-[var(--color-brand-muted)] transition-colors"
           >
-            Retour à l&apos;accueil
+            Planifier un rendez-vous
           </Link>
 
           <Link
-            href="/#contact"
+            href="/"
             className="block w-full border border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-50 hover:border-gray-400 transition-colors"
           >
-            Rencontrer votre agent
+            Retour à l&apos;accueil
           </Link>
         </div>
       </div>
