@@ -35,8 +35,13 @@
     "@types/nodemailer": "6.4.17",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "assert": "^2.1.0",
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.1",
     "eslint": "^9",
     "eslint-config-next": "15.4.6",
+    "process": "^0.11.10",
+    "stream-browserify": "^3.0.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

@@ -19,12 +19,26 @@ const nextConfig: NextConfig = {
   },
 
   // Webpack configuration to handle node: URIs
-  webpack: (config) => {
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      crypto: false,
-      net: false,
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        crypto: require.resolve("crypto-browserify"),
+        stream: require.resolve("stream-browserify"),
+        assert: require.resolve("assert"),
+        buffer: require.resolve("buffer"),
+        process: require.resolve("process/browser"),
+        net: false,
+      };
+    }
+
+    // Handle node: URIs
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "node:crypto": "crypto-browserify",
+      "node:net": false,
     };
+
     return config;
   },
 
