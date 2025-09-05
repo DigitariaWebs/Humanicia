@@ -5,50 +5,34 @@ import { useRouter } from 'next/navigation';
 
 export default function CompagnieCheckout() {
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    cardNumber: '',
-    expiryDate: '',
-    cvv: '',
-    name: '',
-    email: ''
-  });
   const router = useRouter();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    let formattedValue = value;
-
-    // Format card number with spaces
-    if (name === 'cardNumber') {
-      formattedValue = value.replace(/\s/g, '').replace(/(\d{4})/g, '$1 ').trim();
-    }
-
-    // Format expiry date
-    if (name === 'expiryDate') {
-      formattedValue = value.replace(/\D/g, '').replace(/(\d{2})(\d{0,2})/, '$1/$2').slice(0, 5);
-    }
-
-    // Format CVV
-    if (name === 'cvv') {
-      formattedValue = value.replace(/\D/g, '').slice(0, 4);
-    }
-
-    setFormData(prev => ({
-      ...prev,
-      [name]: formattedValue
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleCheckout = async () => {
     setLoading(true);
 
-    // Simulate payment processing
-    setTimeout(() => {
-      // Mock successful payment
-      const sessionId = `mock_session_${Date.now()}`;
-      router.push(`/checkout/success?session_id=${sessionId}`);
-    }, 2000);
+    try {
+      const response = await fetch('/api/checkout/compagnie', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          priceId: process.env.NEXT_PUBLIC_STRIPE_COMPAGNIE_PRICE_ID || 'price_compagnie_demo',
+        }),
+      });
+
+      const { url } = await response.json();
+
+      if (url) {
+        window.location.href = url;
+      } else {
+        throw new Error('No checkout URL received');
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      setLoading(false);
+      // Handle error - could show a toast or error message
+    }
   };
 
   return (
@@ -70,100 +54,26 @@ export default function CompagnieCheckout() {
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg p-6 border border-[var(--color-border)]">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-[var(--color-text)] mb-2">
-                Nom complet
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-                className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
-                placeholder="Votre nom"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-[var(--color-text)] mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-                className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
-                placeholder="votre@email.com"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-[var(--color-text)] mb-2">
-                Numéro de carte
-              </label>
-              <input
-                type="text"
-                name="cardNumber"
-                value={formData.cardNumber}
-                onChange={handleInputChange}
-                required
-                className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
-                placeholder="1234 5678 9012 3456"
-                maxLength={19}
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-[var(--color-text)] mb-2">
-                  Date d&apos;expiration
-                </label>
-                <input
-                  type="text"
-                  name="expiryDate"
-                  value={formData.expiryDate}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
-                  placeholder="MM/YY"
-                  maxLength={5}
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-[var(--color-text)] mb-2">
-                  CVV
-                </label>
-                <input
-                  type="text"
-                  name="cvv"
-                  value={formData.cvv}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
-                  placeholder="123"
-                  maxLength={4}
-                />
-              </div>
+          <div className="space-y-4">
+            <div className="text-center">
+              <p className="text-[var(--color-text)] mb-4">
+                Vous allez être redirigé vers Stripe pour finaliser votre paiement en toute sécurité.
+              </p>
             </div>
 
             <div className="pt-4 space-y-3">
               <button
-                type="submit"
+                onClick={handleCheckout}
                 disabled={loading}
                 className="w-full bg-[var(--color-brand)] text-white py-3 px-6 rounded-lg font-semibold hover:bg-opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <div className="flex items-center justify-center">
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Traitement du paiement...
+                    Redirection vers Stripe...
                   </div>
                 ) : (
-                  'Payer $280/mois'
+                  'Procéder au paiement - $280/mois'
                 )}
               </button>
 
@@ -176,11 +86,11 @@ export default function CompagnieCheckout() {
                 Annuler
               </button>
             </div>
-          </form>
+          </div>
 
           <div className="mt-6 text-center">
             <p className="text-xs text-[var(--color-muted)]">
-              🔒 Paiement sécurisé • Mode démonstration
+              🔒 Paiement sécurisé par Stripe
             </p>
           </div>
         </div>

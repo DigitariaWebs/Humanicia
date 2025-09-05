@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
       payment_method_types: ['card'],
       line_items: [
         {
-          price: priceId,
+          price: priceId || process.env.NEXT_PUBLIC_STRIPE_SERENITE_PRICE_ID,
           quantity: 1,
         },
       ],
