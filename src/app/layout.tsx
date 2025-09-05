@@ -3,6 +3,7 @@ import "./globals.css";
 import ModalProvider from "@/components/providers/ModalProvider";
 import ChatWidget from "@/components/ui/ChatWidget";
 import { Montserrat } from "next/font/google";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -90,10 +91,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={montserrat.variable}>
       <body className={`antialiased`}>
-        <ModalProvider>
-          {children}
-          <ChatWidget />
-        </ModalProvider>
+        <AuthProvider>
+          <ModalProvider>
+            {children}
+            <ChatWidget />
+          </ModalProvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,13 +1,35 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function PresenceCheckout() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { user, isLoading: authLoading } = useAuth();
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push("/?auth=required");
+    }
+  }, [user, authLoading, router]);
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-[var(--color-background)] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-brand)]"></div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null; // Will redirect
+  }
 
   const handleCheckout = async () => {
+    if (!user) return;
+
     setLoading(true);
 
     try {
@@ -15,6 +37,7 @@ export default function PresenceCheckout() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
           priceId:

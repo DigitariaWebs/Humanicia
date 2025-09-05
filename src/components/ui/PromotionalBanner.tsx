@@ -4,14 +4,16 @@ import React from "react";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
 import { useState } from "react";
+import { useModal } from "../providers/ModalProvider";
 
 export default function PromotionalBanner() {
   const [isVisible, setIsVisible] = useState(true);
+  const { isModalOpen } = useModal();
 
   // The banner is positioned fixed at the bottom and should overlay content.
   // No body padding adjustments are needed to avoid layout shifts when it opens/closes.
 
-  if (!isVisible) return null;
+  if (!isVisible || isModalOpen) return null;
 
   return (
     <motion.div

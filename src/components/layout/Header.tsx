@@ -6,7 +6,8 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import { motion } from "framer-motion";
 import { useModal } from "@/components/providers/ModalProvider";
-import { ChevronDown, Sparkles } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { ChevronDown, Sparkles, LogOut } from "lucide-react";
 
 const MotionLink = motion.create(Link);
 
@@ -44,6 +45,7 @@ const NAV_ITEMS: NavItem[] = [
 export default function Header() {
   const pathname = usePathname();
   const { openModal } = useModal();
+  const { user, logout, isLoading } = useAuth();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = React.useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = React.useState(false);
@@ -273,13 +275,42 @@ export default function Header() {
 
             {/* CTA button - Right (Desktop) */}
             <div className="hidden md:flex items-center flex-shrink-0">
-              <button
-                onClick={() => openModal("consultation")}
-                className="inline-flex items-center rounded-full px-4 py-2 text-white text-sm font-semibold shadow-sm focus:outline-none focus-visible:ring-2"
-                style={{ backgroundColor: "var(--color-cta)" }}
-              >
-                Rejoindre
-              </button>
+              {isLoading ? (
+                <div className="w-32 h-8 bg-gray-200 rounded-full animate-pulse"></div>
+              ) : user ? (
+                <button
+                  onClick={logout}
+                  className="w-32 inline-flex items-center justify-center rounded-full px-4 py-2 text-white text-sm font-semibold shadow-sm focus:outline-none focus-visible:ring-2 transition-all duration-200 hover:shadow-md"
+                  style={{ 
+                    backgroundColor: "var(--color-cta)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "var(--color-cta-hover, rgba(59, 130, 246, 0.8))";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "var(--color-cta)";
+                  }}
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Déconnexion
+                </button>
+              ) : (
+                <button
+                  onClick={() => openModal("auth")}
+                  className="w-32 inline-flex items-center justify-center rounded-full px-4 py-2 text-white text-sm font-semibold shadow-sm focus:outline-none focus-visible:ring-2 transition-all duration-200 hover:shadow-md"
+                  style={{ 
+                    backgroundColor: "var(--color-cta)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "var(--color-cta-hover, rgba(59, 130, 246, 0.8))";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "var(--color-cta)";
+                  }}
+                >
+                  Se connecter
+                </button>
+              )}
             </div>
 
             {/* Mobile menu toggle - Right (Mobile only) */}
@@ -414,16 +445,48 @@ export default function Header() {
                   </li>
                 ))}
                 <li className="pt-1">
-                  <button
-                    onClick={() => {
-                      setMobileOpen(false);
-                      openModal("consultation");
-                    }}
-                    className="w-full inline-flex items-center justify-center rounded-full px-4 py-2 text-white text-sm font-semibold shadow-sm"
-                    style={{ backgroundColor: "var(--color-cta)" }}
-                  >
-                    Rejoindre
-                  </button>
+                  {isLoading ? (
+                    <div className="w-full h-10 bg-gray-200 rounded-full animate-pulse"></div>
+                  ) : user ? (
+                    <button
+                      onClick={() => {
+                        setMobileOpen(false);
+                        logout();
+                      }}
+                      className="w-full inline-flex items-center justify-center rounded-full px-4 py-2 text-white text-sm font-semibold shadow-sm transition-all duration-200 hover:shadow-md"
+                      style={{ 
+                        backgroundColor: "var(--color-cta)",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = "var(--color-cta-hover, rgba(59, 130, 246, 0.8))";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = "var(--color-cta)";
+                      }}
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Déconnexion
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        setMobileOpen(false);
+                        openModal("auth");
+                      }}
+                      className="w-full inline-flex items-center justify-center rounded-full px-4 py-2 text-white text-sm font-semibold shadow-sm transition-all duration-200 hover:shadow-md"
+                      style={{ 
+                        backgroundColor: "var(--color-cta)",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = "var(--color-cta-hover, rgba(59, 130, 246, 0.8))";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = "var(--color-cta)";
+                      }}
+                    >
+                      Se connecter
+                    </button>
+                  )}
                 </li>
               </ul>
             </nav>

@@ -2,8 +2,14 @@
 
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import FormModal from "../models/ContactModel";
+import AuthModal from "@/components/models/AuthModal";
 
-export type ModalType = "consultation" | "service" | "job" | "partnership";
+export type ModalType =
+  | "consultation"
+  | "service"
+  | "job"
+  | "partnership"
+  | "auth";
 
 type ModalContextValue = {
   openModal: (type: ModalType, options?: { serviceName?: string }) => void;
@@ -49,12 +55,16 @@ export default function ModalProvider({
   return (
     <ModalContext.Provider value={value}>
       {children}
-      <FormModal
-        isOpen={isOpen}
-        onClose={closeModal}
-        formType={formType}
-        serviceName={serviceName}
-      />
+      {formType === "auth" ? (
+        <AuthModal isOpen={isOpen} onClose={closeModal} />
+      ) : (
+        <FormModal
+          isOpen={isOpen}
+          onClose={closeModal}
+          formType={formType}
+          serviceName={serviceName}
+        />
+      )}
     </ModalContext.Provider>
   );
 }

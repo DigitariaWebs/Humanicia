@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { useModal } from "../providers/ModalProvider";
+import { useAuth } from "@/contexts/AuthContext";
 
 // Small inline icons to avoid extra dependencies
 const IconHeart = ({ className = "" }: { className?: string }) => (
@@ -122,6 +123,7 @@ const plans: Plan[] = [
 
 export default function PricingSection() {
   const { openModal } = useModal();
+  const { user } = useAuth();
   const regularPlans = plans.slice(0, 3);
   const premiumPlan = plans[3];
 
@@ -189,19 +191,29 @@ export default function PricingSection() {
                 ))}
               </ul>
 
-              <Link
-                href={
-                  plan.name === "Forfait Sérénité"
-                    ? "/checkout/serenite"
-                    : plan.name === "Forfait Compagnie"
-                    ? "/checkout/compagnie"
-                    : "/checkout/presence"
-                }
-                className="w-full mt-2 inline-block text-center bg-[var(--color-cta)] text-white px-4 py-3 rounded-lg font-semibold hover:bg-[var(--color-cta-hover)] active:bg-[var(--color-cta-active)]"
-                aria-label={`Choisir ${plan.name}`}
-              >
-                Choisir
-              </Link>
+              {user ? (
+                <Link
+                  href={
+                    plan.name === "Forfait Sérénité"
+                      ? "/checkout/serenite"
+                      : plan.name === "Forfait Compagnie"
+                      ? "/checkout/compagnie"
+                      : "/checkout/presence"
+                  }
+                  className="w-full mt-2 inline-block text-center bg-[var(--color-cta)] text-white px-4 py-3 rounded-lg font-semibold hover:bg-[var(--color-cta-hover)] active:bg-[var(--color-cta-active)]"
+                  aria-label={`Choisir ${plan.name}`}
+                >
+                  Choisir
+                </Link>
+              ) : (
+                <button
+                  onClick={() => openModal("auth")}
+                  className="w-full mt-2 inline-block text-center bg-[var(--color-cta)] text-white px-4 py-3 rounded-lg font-semibold hover:bg-[var(--color-cta-hover)] active:bg-[var(--color-cta-active)]"
+                  aria-label={`Se connecter pour choisir ${plan.name}`}
+                >
+                  Se connecter
+                </button>
+              )}
             </div>
           ))}
         </div>

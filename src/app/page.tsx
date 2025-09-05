@@ -1,3 +1,7 @@
+"use client";
+
+import { useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Header from "@/components/layout/Header";
 import HeroSection from "../components/sections/HeroSection";
 import AboutSection from "@/components/sections/AboutSection";
@@ -11,10 +15,28 @@ import Footer from "@/components/layout/Footer";
 import InfiniteSlider from "@/components/ui/InfiniteSlider";
 import ClarifySection from "@/components/sections/ClarifySection";
 import PromotionalBanner from "@/components/ui/PromotionalBanner";
+import { useModal } from "@/components/providers/ModalProvider";
+
+// Component that handles search params
+function SearchParamsHandler() {
+  const searchParams = useSearchParams();
+  const { openModal } = useModal();
+
+  useEffect(() => {
+    if (searchParams?.get("auth") === "required") {
+      openModal("auth");
+    }
+  }, [searchParams, openModal]);
+
+  return null;
+}
 
 export default function Home() {
   return (
     <main>
+      <Suspense fallback={null}>
+        <SearchParamsHandler />
+      </Suspense>
       <PromotionalBanner />
       <Header />
       <HeroSection />
