@@ -3,7 +3,7 @@ import dbConnect from '@/lib/mongodb';
 import User from '@/lib/models/User';
 import { verifyToken } from '@/lib/auth';
 import { auditLogger } from "@/lib/security";
-import { tokenBlacklist } from "@/lib/security";
+import { tokenBlacklist } from "@/lib/server-security";
 
 export async function GET(request: NextRequest) {
   try {
