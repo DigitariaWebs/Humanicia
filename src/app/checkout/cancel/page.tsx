@@ -25,20 +25,21 @@ export default function CheckoutCancel() {
         </h1>
 
         <p className="text-[var(--color-cta)] mb-6">
-          Aucun problème ! Vous pouvez réessayer quand vous voulez ou choisir un autre forfait.
+          Aucun problème ! Vous pouvez réessayer quand vous voulez ou choisir un
+          autre forfait.
         </p>
 
         <div className="space-y-3">
           <Link
             href="/#pricing"
-            className="block w-full bg-[var(--color-brand)] text-white py-3 px-6 rounded-lg font-semibold hover:bg-opacity-90 transition-colors"
+            className="block w-full bg-[var(--color-brand)] text-white py-3 px-6 rounded-lg font-semibold hover:bg-[var(--color-brand-muted)] transition-colors"
           >
             Retour aux tarifs
           </Link>
 
           <Link
             href="/"
-            className="block w-full border border-[var(--color-brand)] text-[var(--color-brand)] py-3 px-6 rounded-lg font-semibold hover:bg-[var(--color-brand)] hover:text-white transition-colors"
+            className="block w-full border border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-50 hover:border-gray-400 transition-colors"
           >
             Retour à l&apos;accueil
           </Link>
