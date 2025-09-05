@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/lib/models/User';
-import { hashPassword, signToken } from '@/lib/auth';
+import { hashPassword } from "@/lib/auth";
 import {
   validateEmail,
   validatePasswordStrength,
@@ -9,6 +9,11 @@ import {
   auditLogger,
   checkRateLimit,
 } from "@/lib/security";
+import {
+  generateVerificationCode,
+  getVerificationCodeExpiryTime,
+  sendVerificationEmail,
+} from "@/lib/email";
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,13 +25,13 @@ export async function POST(request: NextRequest) {
     // Check rate limiting
     if (!checkRateLimit(`auth_signup_${clientIP}`, 3, 15 * 60 * 1000)) {
       auditLogger.log({
-        action: 'RATE_LIMIT_EXCEEDED',
+        action: "RATE_LIMIT_EXCEEDED",
         ip: clientIP,
-        userAgent: request.headers.get('user-agent') || '',
-        details: { endpoint: 'signup' }
+        userAgent: request.headers.get("user-agent") || "",
+        details: { endpoint: "signup" },
       });
       return NextResponse.json(
-        { error: 'Too many signup attempts, please try again later.' },
+        { error: "Too many signup attempts, please try again later." },
         { status: 429 }
       );
     }
@@ -85,19 +90,52 @@ export async function POST(request: NextRequest) {
     // Hash password
     const hashedPassword = await hashPassword(sanitizedPassword);
 
-    // Create user
+    // Generate verification code
+    const verificationCode = generateVerificationCode();
+    const verificationExpiry = getVerificationCodeExpiryTime();
+
+    // Create user with email verification fields
     const user = await User.create({
       name: sanitizedName,
       email: sanitizedEmail,
       password: hashedPassword,
+      isEmailVerified: false,
+      emailVerificationCode: verificationCode,
+      emailVerificationExpires: verificationExpiry,
+      emailVerificationAttempts: 0,
     });
 
-    // Create JWT token
-    const token = signToken({
-      userId: user._id,
-      email: user.email,
-      name: user.name,
-    });
+    // Send verification email
+    const emailSent = await sendVerificationEmail(
+      sanitizedEmail,
+      sanitizedName,
+      verificationCode
+    );
+
+    if (!emailSent) {
+      // If email fails to send, we still created the user but log the failure
+      auditLogger.log({
+        action: "SIGNUP_EMAIL_FAILED",
+        userId: user._id.toString(),
+        ip: clientIP,
+        userAgent: request.headers.get("user-agent") || "",
+        details: { email: sanitizedEmail, name: sanitizedName },
+      });
+
+      // You might want to delete the user or implement a retry mechanism
+      // For now, we'll return success but note the email issue
+      return NextResponse.json({
+        message:
+          "Account created successfully, but there was an issue sending the verification email. Please use the resend option.",
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          isEmailVerified: false,
+        },
+        requiresVerification: true,
+      });
+    }
 
     auditLogger.log({
       action: "SIGNUP_SUCCESS",
@@ -107,14 +145,17 @@ export async function POST(request: NextRequest) {
       details: { email: sanitizedEmail, name: sanitizedName },
     });
 
-    // Return user data and token
+    // Return success response - no JWT token until email is verified
     return NextResponse.json({
+      message:
+        "Account created successfully! Please check your email for a verification code.",
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
+        isEmailVerified: false,
       },
-      token,
+      requiresVerification: true,
     });
   } catch (error) {
     console.error("Signup error:", error);

@@ -18,6 +18,16 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ["framer-motion", "lucide-react"],
   },
 
+  // Webpack configuration to handle node: URIs
+  webpack: (config) => {
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      crypto: false,
+      net: false,
+    };
+    return config;
+  },
+
   // Security headers
   async headers() {
     return [

@@ -17,6 +17,23 @@ const UserSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+  isEmailVerified: {
+    type: Boolean,
+    default: false,
+  },
+  emailVerificationCode: {
+    type: String,
+    select: false, // Don't include in queries by default
+  },
+  emailVerificationExpires: {
+    type: Date,
+    select: false, // Don't include in queries by default
+  },
+  emailVerificationAttempts: {
+    type: Number,
+    default: 0,
+    select: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

@@ -6,15 +6,28 @@ interface User {
   id: string;
   name: string;
   email: string;
+  isEmailVerified?: boolean;
+}
+
+interface AuthResponse {
+  user: User;
+  token?: string;
+  requiresVerification?: boolean;
+  message?: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => Promise<void>;
-  signup: (name: string, email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<AuthResponse>;
+  signup: (
+    name: string,
+    email: string,
+    password: string
+  ) => Promise<AuthResponse>;
   logout: () => void;
   isLoading: boolean;
   csrfToken: string;
+  completeEmailVerification: (userData: User, token?: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -62,7 +75,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const login = async (email: string, password: string) => {
+  const login = async (
+    email: string,
+    password: string
+  ): Promise<AuthResponse> => {
     const response = await fetch("/api/auth/login", {
       method: "POST",
       headers: {
@@ -77,11 +93,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       throw new Error(data.error || "Login failed");
     }
 
-    localStorage.setItem("token", data.token);
-    setUser(data.user);
+    // If email verification is required, don't set user state yet
+    if (data.requiresVerification) {
+      return data as AuthResponse;
+    }
+
+    // Normal login flow
+    if (data.token) {
+      localStorage.setItem("token", data.token);
+      setUser(data.user);
+    }
+
+    return data as AuthResponse;
   };
 
-  const signup = async (name: string, email: string, password: string) => {
+  const signup = async (
+    name: string,
+    email: string,
+    password: string
+  ): Promise<AuthResponse> => {
     const response = await fetch("/api/auth/signup", {
       method: "POST",
       headers: {
@@ -96,13 +126,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       throw new Error(data.error || "Signup failed");
     }
 
-    localStorage.setItem("token", data.token);
-    setUser(data.user);
+    // Signup now requires email verification, so don't set user state yet
+    return data as AuthResponse;
   };
 
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
+  };
+
+  const completeEmailVerification = (userData: User, token?: string) => {
+    // After email verification, log the user in automatically
+    if (token) {
+      localStorage.setItem("token", token);
+    }
+    setUser(userData);
   };
 
   const value = {
@@ -112,6 +150,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     logout,
     isLoading,
     csrfToken,
+    completeEmailVerification,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

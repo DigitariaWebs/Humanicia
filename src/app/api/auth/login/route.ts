@@ -168,6 +168,34 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check if email is verified
+    if (!user.isEmailVerified) {
+      auditLogger.log({
+        action: "LOGIN_FAILED",
+        userId: user._id.toString(),
+        ip: clientIP,
+        userAgent: request.headers.get("user-agent") || "",
+        details: {
+          email: sanitizedEmail,
+          reason: "email_not_verified",
+        },
+      });
+
+      return NextResponse.json(
+        {
+          error: "Please verify your email address before logging in",
+          requiresVerification: true,
+          user: {
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            isEmailVerified: false,
+          },
+        },
+        { status: 401 }
+      );
+    }
+
     // Reset failed attempts on successful login
     failedAttempts.delete(sanitizedEmail);
 
@@ -192,6 +220,7 @@ export async function POST(request: NextRequest) {
         id: user._id,
         name: user.name,
         email: user.email,
+        isEmailVerified: user.isEmailVerified,
       },
       token,
     });
