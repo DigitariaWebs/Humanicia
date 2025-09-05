@@ -18,6 +18,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [apiError, setApiError] = useState("");
   const [showEmailVerification, setShowEmailVerification] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -131,6 +132,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     setErrors({});
     setApiError("");
     setShowEmailVerification(false);
+    setShowForgotPassword(false);
     setFormData({ name: "", email: "", password: "" });
   };
 
@@ -140,6 +142,46 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   };
 
   const handleBackToLogin = () => {
+    setShowEmailVerification(false);
+    setIsLogin(true);
+  };
+
+  const handleForgotPassword = async () => {
+    if (!formData.email) {
+      setErrors({ email: "Email est requis" });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: formData.email }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setApiError("");
+        alert(
+          "Si un compte avec cet email existe, un lien de réinitialisation a été envoyé."
+        );
+        setShowForgotPassword(false);
+      } else {
+        setApiError(data.error || "Une erreur est survenue");
+      }
+    } catch (err) {
+      setApiError("Une erreur est survenue");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleBackToAuth = () => {
+    setShowForgotPassword(false);
     setShowEmailVerification(false);
     setIsLogin(true);
   };
@@ -187,6 +229,85 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                     onVerificationSuccess={handleVerificationSuccess}
                     onBackToLogin={handleBackToLogin}
                   />
+                </>
+              ) : showForgotPassword ? (
+                <>
+                  {/* Forgot Password Header */}
+                  <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 className="text-2xl font-cinzel font-bold text-[var(--color-brand)]">
+                      Réinitialiser le mot de passe
+                    </h2>
+                    <button
+                      onClick={onClose}
+                      className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  {/* Forgot Password Form */}
+                  <div className="p-6 space-y-4">
+                    {apiError && (
+                      <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                        <AlertCircle className="w-4 h-4 text-red-500" />
+                        <span className="text-sm text-red-700">{apiError}</span>
+                      </div>
+                    )}
+
+                    <p className="text-sm text-gray-600">
+                      Entrez votre adresse email et nous vous enverrons un lien
+                      pour réinitialiser votre mot de passe.
+                    </p>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Email
+                      </label>
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <input
+                          type="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent ${
+                            errors.email ? "border-red-500" : "border-gray-300"
+                          }`}
+                          placeholder="votre@email.com"
+                        />
+                      </div>
+                      {errors.email && (
+                        <p className="mt-1 text-sm text-red-600">
+                          {errors.email}
+                        </p>
+                      )}
+                    </div>
+
+                    <button
+                      onClick={handleForgotPassword}
+                      disabled={isLoading}
+                      className="w-full bg-[var(--color-brand)] text-white py-3 px-6 rounded-lg font-semibold hover:bg-opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isLoading ? (
+                        <div className="flex items-center justify-center">
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          Envoi en cours...
+                        </div>
+                      ) : (
+                        "Envoyer le lien de réinitialisation"
+                      )}
+                    </button>
+
+                    <div className="text-center">
+                      <button
+                        type="button"
+                        onClick={handleBackToAuth}
+                        className="text-[var(--color-brand)] hover:underline text-sm"
+                      >
+                        Retour à la connexion
+                      </button>
+                    </div>
+                  </div>
                 </>
               ) : (
                 <>
@@ -298,6 +419,18 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                         </p>
                       )}
                     </div>
+
+                    {isLogin && (
+                      <div className="text-right">
+                        <button
+                          type="button"
+                          onClick={() => setShowForgotPassword(true)}
+                          className="text-sm text-[var(--color-brand)] hover:underline"
+                        >
+                          Mot de passe oublié ?
+                        </button>
+                      </div>
+                    )}
 
                     <button
                       type="submit"
