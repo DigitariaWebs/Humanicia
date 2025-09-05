@@ -1,8 +1,5 @@
 import rateLimit from 'express-rate-limit';
 
-// In-memory token blacklist (in production, use Redis or database)
-export const tokenBlacklist = new Set<string>();
-
 // Rate limiting for authentication endpoints
 export const authRateLimit = rateLimit({
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000'), // 15 minutes

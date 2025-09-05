@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auditLogger } from "@/lib/security";
-import { tokenBlacklist } from "@/lib/server-security";
+import { tokenBlacklist } from "@/lib/token-blacklist";
+
+export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
   try {

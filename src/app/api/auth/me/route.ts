@@ -3,7 +3,9 @@ import dbConnect from '@/lib/mongodb';
 import User from '@/lib/models/User';
 import { verifyToken } from '@/lib/auth';
 import { auditLogger } from "@/lib/security";
-import { tokenBlacklist } from "@/lib/server-security";
+import { tokenBlacklist } from "@/lib/token-blacklist";
+
+export const runtime = "nodejs";
 
 export async function GET(request: NextRequest) {
   try {
