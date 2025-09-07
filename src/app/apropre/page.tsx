@@ -69,6 +69,7 @@ export default function AproprePage() {
                   height={560}
                   className="w-full h-auto object-cover object-center origin-center transition-transform duration-300 group-hover:scale-105 will-change-transform"
                   priority
+                  quality={70}
                 />
                 <div className="pointer-events-none absolute inset-0 bg-black/20 opacity-0 transition-opacity duration-300 group-hover:opacity-10" />
               </motion.figure>
