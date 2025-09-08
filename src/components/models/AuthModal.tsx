@@ -173,7 +173,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       } else {
         setApiError(data.error || "Une erreur est survenue");
       }
-    } catch (err) {
+    } catch {
       setApiError("Une erreur est survenue");
     } finally {
       setIsLoading(false);

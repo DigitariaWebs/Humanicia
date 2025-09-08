@@ -70,7 +70,7 @@ function ResetPasswordForm() {
       } else {
         setError(data.error || 'Une erreur est survenue');
       }
-    } catch (err) {
+    } catch {
       setError('Une erreur est survenue');
     } finally {
       setIsLoading(false);

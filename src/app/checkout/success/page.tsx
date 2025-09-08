@@ -44,7 +44,7 @@ function CheckoutSuccessContent() {
 
         <div className="space-y-3">
           <Link
-            href="https://calendly.com/your-calendly-link" // Replace with your actual Calendly link
+            href="https://calendly.com/ericthomas1706/30min"
             target="_blank"
             rel="noopener noreferrer"
             className="block w-full bg-[var(--color-brand)] text-white py-3 px-6 rounded-lg font-semibold hover:bg-[var(--color-brand-muted)] transition-colors"

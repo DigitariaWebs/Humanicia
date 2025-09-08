@@ -14,7 +14,6 @@ interface EmailVerificationProps {
 
 const EmailVerification: React.FC<EmailVerificationProps> = ({
   email,
-  userName: _userName,
   onVerificationSuccess,
   onBackToLogin
 }) => {

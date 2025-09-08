@@ -80,8 +80,31 @@ export default function SereniteCheckout() {
           <div className="space-y-4">
             <div className="text-center">
               <p className="text-[var(--color-text)] mb-4">
-                Vous allez être redirigé vers Stripe pour finaliser votre
-                paiement en toute sécurité.
+                Choisissez votre méthode de paiement :
+              </p>
+            </div>
+
+            {/* Interac e-transfer option */}
+            <div className="border border-[var(--color-border)] rounded-lg p-4 bg-gray-50">
+              <h3 className="font-semibold text-[var(--color-text)] mb-2">
+                Virement Interac e-transfer
+              </h3>
+              <p className="text-sm text-[var(--color-muted)] mb-3">
+                Envoyez votre paiement directement à Éric Thomas via Interac e-transfer.
+              </p>
+              <div className="bg-white rounded p-3 border">
+                <p className="text-sm font-medium text-[var(--color-text)]">
+                  Adresse email : <span className="font-mono">humanicia@gmail.com</span>
+                </p>
+                <p className="text-xs text-[var(--color-muted)] mt-1">
+                  Veuillez inclure votre nom et &quot;Forfait Sérénité&quot; dans la note.
+                </p>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <p className="text-[var(--color-text)] mb-4">
+                Ou payez en ligne avec Stripe :
               </p>
             </div>
 
