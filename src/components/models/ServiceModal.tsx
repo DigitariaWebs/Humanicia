@@ -4,6 +4,9 @@ import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+import { useModal } from "@/components/providers/ModalProvider";
 
 export type ServiceInfo = {
   id: string;
@@ -74,6 +77,36 @@ export default function ServiceModal({
   serviceId,
 }: ServiceModalProps) {
   const service = SERVICE_DETAILS.find((s) => s.id === serviceId);
+  const router = useRouter();
+  const { user } = useAuth();
+  const { openModal } = useModal();
+
+  // Service to checkout route mapping
+  const getCheckoutRoute = (serviceId: string) => {
+    const routeMap: Record<string, string> = {
+      'audio': '/checkout/services/audio',
+      'anonymous': '/checkout/services/anonymous', 
+      'visio': '/checkout/services/visio',
+      'presence': '/checkout/services/presence-inperson'
+    };
+    return routeMap[serviceId] || '/checkout/cancel';
+  };
+
+  const handleReservation = () => {
+    if (!user) {
+      // Close service modal first, then open auth modal
+      onClose();
+      setTimeout(() => {
+        openModal("auth");
+      }, 100);
+      return;
+    }
+
+    // User is authenticated, redirect to checkout
+    const checkoutRoute = getCheckoutRoute(serviceId!);
+    onClose();
+    router.push(checkoutRoute);
+  };
 
   // Handle ESC key press and prevent body scroll
   React.useEffect(() => {
@@ -208,19 +241,10 @@ export default function ServiceModal({
                     Fermer
                   </button>
                   <button
-                    onClick={() => {
-                      // Close modal first, then scroll to contact section
-                      onClose();
-                      // Use setTimeout to ensure modal closes before scrolling
-                      setTimeout(() => {
-                        document
-                          .getElementById("contact")
-                          ?.scrollIntoView({ behavior: "smooth" });
-                      }, 100);
-                    }}
+                    onClick={handleReservation}
                     className="flex-1 px-4 py-3 bg-orange-600 text-white rounded-xl font-medium hover:bg-orange-700 transition-colors cursor-pointer"
                   >
-                    Réserver maintenant
+                    {user ? "Réserver maintenant" : "Se connecter"}
                   </button>
                 </div>
               </div>
