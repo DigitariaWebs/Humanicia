@@ -92,26 +92,31 @@ export default function AgentPage() {
                   className="text-3xl md:text-4xl font-bold"
                   style={{ color: "var(--color-brand)" }}
                 >
-                  Maxyme
+                  Mariora
                 </h2>
                 <p
                   className="mt-4 text-lg md:text-lg leading-relaxed text-justify"
                   style={{ color: "var(--color-muted)" }}
                 >
-                  Passionnée d’automobile, de gaming et de photographie, j’aime
-                  découvrir et partager de nouvelles expériences. Je suis une
-                  personne au grand cœur, toujours prête à écouter et à offrir
-                  une présence sincère.
+                  Je suis une personne profondément humaine, animée par une
+                  passion sincère pour la découverte — qu’elle soit intérieure
+                  ou à travers le monde. Le voyage nourrit chez Moi une
+                  ouverture à l’autre, un émerveillement constant face à la
+                  diversité des cultures, des récits, des émotions. La lecture,
+                  quant à elle, est mon refuge et mon outil : elle m&apos;offre
+                  des mots pour comprendre, ressentir, et transmettre.
                 </p>
                 <p
                   className="mt-4 text-lg md:text-lg leading-relaxed text-justify"
                   style={{ color: "var(--color-muted)" }}
                 >
-                  Avec Humanicia, je souhaite mettre cette sensibilité au
-                  service des autres : être une présence rassurante, une oreille
-                  attentive et créer de vrais moments de connexion. Ce qui me
-                  motive, c’est d’accompagner chaque personne avec chaleur,
-                  bienveillance et authenticité.
+                  Ma présence est douce et pleine, marquée par une qualité
+                  d’écoute rare. Je sais être là, vraiment là, avec l’autre. Mon
+                  empathie m’invite à accueillir sans juger, à comprendre
+                  au-delà des mots, à sentir ce qui se vit en silence. Prendre
+                  soin n’est pas pour Moi un simple geste, mais une manière
+                  d’être : attentive, bienveillante, profondément engagée dans
+                  la relation.
                 </p>
               </div>
             </div>
@@ -123,14 +128,14 @@ export default function AgentPage() {
               >
                 <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden">
                   <Image
-                    src="/AgentPage/PhotoSecondaire.png"
-                    alt="Maxyme"
+                    src="/AgentPage/PhotoSecondaire.jpg"
+                    alt="Mariora"
                     fill
                     sizes="(max-width: 768px) 100vw, 33vw"
                     className="object-cover"
                     loading="lazy"
                     placeholder="blur"
-                    blurDataURL="/AgentPage/PhotoSecondaireBlur.png"
+                    blurDataURL="/AgentPage/PhotoSecondaireBlur.jpg"
                   />
                 </div>
               </div>

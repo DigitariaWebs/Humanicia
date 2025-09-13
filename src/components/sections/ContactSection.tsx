@@ -1,6 +1,6 @@
 "use client";
 
-import { Phone, Smartphone, Mail, MapPin, Users } from "lucide-react";
+import { Phone, Smartphone, Mail, MapPin, Users, MessageCircle } from "lucide-react";
 import { useModal } from "@/components/providers/ModalProvider";
 
 // type ModalType = 'consultation' | 'service' | 'job' | 'partnership';
@@ -48,7 +48,7 @@ export default function ContactSection() {
 
             <div className="space-y-6">
               <a href="tel:5145188251" className="block">
-                <div className="flex items-center gap-4 p-4 rounded-2xl ring-1 ring-black/5 bg-white transition-all hover:-translate-y-0.5">
+                <div className="group flex items-center gap-4 p-4 rounded-2xl ring-1 ring-black/5 bg-white transition-all hover:-translate-y-0.5">
                   <div
                     className="w-12 h-12 rounded-2xl grid place-items-center"
                     style={{ background: "var(--color-sky)" }}
@@ -65,18 +65,45 @@ export default function ContactSection() {
                     >
                       Téléphone
                     </h4>
-                    <p
-                      className="transition-colors"
-                      style={{ color: "var(--color-muted)" }}
-                    >
+                    <p className="transition-colors group-hover:text-[var(--color-cta)] text-[var(--color-muted)]">
                       514 518 8251
                     </p>
                   </div>
                 </div>
               </a>
 
+              <a
+                href="https://wa.me/15145188251"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block"
+              >
+                <div className="group flex items-center gap-4 p-4 rounded-2xl ring-1 ring-black/5 bg-white transition-all hover:-translate-y-0.5">
+                  <div
+                    className="w-12 h-12 rounded-2xl grid place-items-center"
+                    style={{ background: "var(--color-green)" }}
+                  >
+                    <MessageCircle
+                      className="w-6 h-6"
+                      style={{ color: "var(--color-brand)" }}
+                    />
+                  </div>
+                  <div>
+                    <h4
+                      className="font-semibold"
+                      style={{ color: "var(--color-text)" }}
+                    >
+                      WhatsApp
+                    </h4>
+                    <p className="transition-colors group-hover:text-[var(--color-cta)] text-[var(--color-muted)]">
+                      +1 (514) 518-8251
+                    </p>
+                  </div>
+                </div>
+              </a>
+
               <a href="mailto:humanicia@gmail.com" className="block">
-                <div className="flex items-center gap-4 p-4 rounded-2xl ring-1 ring-black/5 bg-white transition-all hover:-translate-y-0.5">
+                <div className="group flex items-center gap-4 p-4 rounded-2xl ring-1 ring-black/5 bg-white transition-all hover:-translate-y-0.5">
                   <div
                     className="w-12 h-12 rounded-2xl grid place-items-center"
                     style={{ background: "var(--color-lavender)" }}
@@ -93,10 +120,7 @@ export default function ContactSection() {
                     >
                       Email
                     </h4>
-                    <p
-                      className="transition-colors"
-                      style={{ color: "var(--color-muted)" }}
-                    >
+                    <p className="transition-colors group-hover:text-[var(--color-cta)] text-[var(--color-muted)]">
                       humanicia@gmail.com
                     </p>
                   </div>
@@ -109,7 +133,7 @@ export default function ContactSection() {
                 rel="noopener noreferrer"
                 className="block"
               >
-                <div className="flex items-center gap-4 p-4 rounded-2xl ring-1 ring-black/5 bg-white transition-all hover:-translate-y-0.5">
+                <div className="group flex items-center gap-4 p-4 rounded-2xl ring-1 ring-black/5 bg-white transition-all hover:-translate-y-0.5">
                   <div
                     className="w-12 h-12 rounded-2xl grid place-items-center"
                     style={{ background: "var(--color-clay)" }}
@@ -126,10 +150,7 @@ export default function ContactSection() {
                     >
                       Adresse
                     </h4>
-                    <p
-                      className="transition-colors"
-                      style={{ color: "var(--color-muted)" }}
-                    >
+                    <p className="transition-colors group-hover:text-[var(--color-cta)] text-[var(--color-muted)]">
                       3242, Avenue Gonthier. Suite A
                       <br />
                       Montréal. Qc. H1L 6J9

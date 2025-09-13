@@ -8,14 +8,16 @@ import ServiceModal from "@/components/models/ServiceModal";
 function FooterLink({
   href,
   children,
+  ...props
 }: {
   href: string;
   children: React.ReactNode;
-}) {
+} & React.AnchorHTMLAttributes<HTMLAnchorElement>) {
   return (
     <Link
       href={href}
       className="block text-[13px] md:text-sm leading-6 text-white/70 hover:text-white transition-colors"
+      {...props}
     >
       {children}
     </Link>
@@ -26,16 +28,18 @@ function SocialIcon({
   href,
   label,
   children,
+  ...props
 }: {
   href: string;
   label: string;
   children: React.ReactNode;
-}) {
+} & React.AnchorHTMLAttributes<HTMLAnchorElement>) {
   return (
     <Link
       href={href}
       aria-label={label}
       className="inline-flex h-8 w-8 items-center justify-center rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+      {...props}
     >
       {children}
     </Link>
@@ -137,7 +141,7 @@ export default function Footer() {
             <p className="text-sm font-semibold mb-3">Assistance</p>
             <nav className="space-y-2">
               <FooterLink href="#contact">Nous contacter</FooterLink>
-              <FooterLink href="#">WhatsApp</FooterLink>
+              <FooterLink href="https://wa.me/15145188251" target="_blank" rel="noopener noreferrer">WhatsApp</FooterLink>
               <FooterLink href="#">Reporter un problème</FooterLink>
             </nav>
           </div>
@@ -150,22 +154,10 @@ export default function Footer() {
         <div className="mt-6 flex items-center justify-between gap-4">
           <p className="text-xs md:text-sm text-white/60">2025 - Humanicia</p>
           <div className="flex items-center gap-2">
-            {/* X */}
-            <SocialIcon href="#" label="X">
+            {/* Facebook */}
+            <SocialIcon href="https://www.facebook.com/profile.php?id=61579868228310&locale=fr_CA" label="Facebook" target="_blank" rel="noopener noreferrer">
               <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
-                <path d="M18.9 3H21l-6.9 7.9L22 21h-6.9l-4.5-5.4L4.6 21H3l7.4-8.5L2 3h7l4 4.8L18.9 3zM8.2 4.5H5.7l10.1 12.1h2.5L8.2 4.5z" />
-              </svg>
-            </SocialIcon>
-            {/* LinkedIn */}
-            <SocialIcon href="#" label="LinkedIn">
-              <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
-                <path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.5 8h4V23h-4V8zM8.5 8h3.8v2.05h.05C13.1 8.76 15 8 16.9 8 21.1 8 23 10.6 23 15.1V23h-4v-6.5c0-1.55-.03-3.55-2.17-3.55-2.17 0-2.5 1.7-2.5 3.43V23h-4V8z" />
-              </svg>
-            </SocialIcon>
-            {/* Instagram */}
-            <SocialIcon href="#" label="Instagram">
-              <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
-                <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.51 5.51 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.2a1 1 0 1 1-1 1 1 1 0 0 1 1-1z" />
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
               </svg>
             </SocialIcon>
           </div>
