@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useModal } from "@/components/providers/ModalProvider";
 
 type ChatRole = "bot" | "user";
@@ -188,7 +188,7 @@ export default function ChatWidget() {
         <div
           ref={panelRef}
           style={{ bottom: `${20 + bannerOffset}px` }}
-          className="fixed right-4 z-50 w-[340px] max-w-[88vw] rounded-2xl bg-white shadow-xl border border-[var(--color-border)]"
+          className="fixed right-2 sm:right-4 z-50 w-[320px] sm:w-[340px] max-w-[calc(100vw-1rem)] rounded-2xl bg-white shadow-xl border border-[var(--color-border)]"
         >
           <div className="flex items-center justify-between px-4 py-3 rounded-t-2xl bg-[var(--color-brand)] text-white">
             <div className="font-semibold">Humanicia helper</div>
@@ -256,17 +256,17 @@ export default function ChatWidget() {
                 e.preventDefault();
                 send(input);
               }}
-              className="flex items-center gap-2"
+              className="flex items-end gap-2"
             >
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Type a message…"
-                className="flex-1 rounded-xl border border-[var(--color-border)] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] bg-white"
+                className="flex-1 min-w-0 rounded-xl border border-[var(--color-border)] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] bg-white text-sm"
               />
               <button
                 type="submit"
-                className="rounded-xl bg-[var(--color-brand)] text-white px-3 py-2 hover:bg-green-700"
+                className="flex-shrink-0 rounded-xl bg-[var(--color-brand)] text-white px-3 py-2 hover:bg-green-700 text-sm whitespace-nowrap"
               >
                 Send
               </button>
@@ -277,5 +277,3 @@ export default function ChatWidget() {
     </>
   );
 }
-
-

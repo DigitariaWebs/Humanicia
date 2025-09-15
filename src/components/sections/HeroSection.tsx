@@ -147,55 +147,61 @@ export default function HeroSection() {
 
         {/* Primary CTAs */}
         <motion.div
-          className="mt-6 sm:mt-8 flex flex-row items-center justify-center gap-2 sm:gap-4"
+          className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4"
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-20% 0px -20% 0px" }}
           transition={{ duration: 0.4, ease: "easeOut", delay: 0.15 }}
         >
-          <button
-            type="button"
-            onClick={() => openModal("consultation")}
-            className="px-3 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold text-white text-sm sm:text-base shadow hover:-translate-y-0.5 transition-transform"
-            style={{
-              background:
-                "linear-gradient(90deg, var(--color-cta), var(--color-cta-hover))",
-            }}
-            aria-label="Réserver un moment"
-          >
-            <span className="sm:hidden">Réserver</span>
-            <span className="hidden sm:inline">Réserver un moment</span>
-          </button>
+          {/* First line on mobile: Réserver button */}
+          <div className="flex justify-center">
+            <button
+              type="button"
+              onClick={() => openModal("consultation")}
+              className="px-3 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold text-white text-sm sm:text-base shadow hover:-translate-y-0.5 transition-transform"
+              style={{
+                background:
+                  "linear-gradient(90deg, var(--color-cta), var(--color-cta-hover))",
+              }}
+              aria-label="Réserver un moment"
+            >
+              <span className="sm:hidden">Réserver</span>
+              <span className="hidden sm:inline">Réserver un moment</span>
+            </button>
+          </div>
 
-          <Link
-            href="#agents"
-            className="px-3 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold text-gray-900 text-sm sm:text-base border border-gray-300 hover:-translate-y-0.5 transition-transform shadow"
-            style={{ background: "#f9f9f9" }}
-            aria-label="Parler avec un agent"
-          >
-            <span className="sm:hidden">Parler</span>
-            <span className="hidden sm:inline">Parler avec un agent</span>
-          </Link>
+          {/* Second line on mobile: Other buttons */}
+          <div className="flex flex-row items-center justify-center gap-2 sm:gap-4 mt-2 sm:mt-0">
+            <Link
+              href="#agents"
+              className="px-3 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold text-gray-900 text-sm sm:text-base border border-gray-300 hover:-translate-y-0.5 transition-transform shadow"
+              style={{ background: "#f9f9f9" }}
+              aria-label="Parler avec un agent"
+            >
+              <span className="sm:hidden">Parler</span>
+              <span className="hidden sm:inline">Parler avec un agent</span>
+            </Link>
 
-          <Link
-            href="#contact"
-            className="px-3 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold text-gray-900 text-sm sm:text-base border border-gray-300 hover:-translate-y-0.5 transition-transform shadow"
-            style={{ background: "#f9f9f9" }}
-            aria-label="Planifier une rencontre"
-          >
-            <span className="sm:hidden">Rencontre</span>
-            <span className="hidden sm:inline">Planifier une rencontre</span>
-          </Link>
+            <Link
+              href="#contact"
+              className="px-3 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold text-gray-900 text-sm sm:text-base border border-gray-300 hover:-translate-y-0.5 transition-transform shadow"
+              style={{ background: "#f9f9f9" }}
+              aria-label="Planifier une rencontre"
+            >
+              <span className="sm:hidden">Rencontre</span>
+              <span className="hidden sm:inline">Planifier une rencontre</span>
+            </Link>
 
-          <Link
-            href="#services"
-            className="px-3 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold text-gray-900 text-sm sm:text-base border border-gray-300 hover:-translate-y-0.5 transition-transform shadow"
-            style={{ background: "#f9f9f9" }}
-            aria-label="Découvrir nos services"
-          >
-            <span className="sm:hidden">Services</span>
-            <span className="hidden sm:inline">Découvrir nos services</span>
-          </Link>
+            <Link
+              href="#services"
+              className="px-3 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold text-gray-900 text-sm sm:text-base border border-gray-300 hover:-translate-y-0.5 transition-transform shadow"
+              style={{ background: "#f9f9f9" }}
+              aria-label="Découvrir nos services"
+            >
+              <span className="sm:hidden">Services</span>
+              <span className="hidden sm:inline">Découvrir nos services</span>
+            </Link>
+          </div>
         </motion.div>
       </div>
 

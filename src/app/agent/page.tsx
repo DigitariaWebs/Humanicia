@@ -24,8 +24,8 @@ export default function AgentPage() {
             style={{ color: "var(--color-muted)" }}
           >
             Des personnes attentionnées, formées pour créer du lien avec chaleur
-            et bienveillance. Découvrez Éric, fondateur, et Maxyme, notre
-            présence rassurante.
+            et bienveillance. Découvrez Éric, fondateur, et Marioara, notre
+            accompagnante dévouée.
           </p>
         </div>
       </section>
@@ -92,7 +92,7 @@ export default function AgentPage() {
                   className="text-3xl md:text-4xl font-bold"
                   style={{ color: "var(--color-brand)" }}
                 >
-                  Mariora
+                  Marioara
                 </h2>
                 <p
                   className="mt-4 text-lg md:text-lg leading-relaxed text-justify"

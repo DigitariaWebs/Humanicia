@@ -3,12 +3,26 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useModal } from "../providers/ModalProvider";
 
 export default function PromotionalBanner() {
   const [isVisible, setIsVisible] = useState(true);
   const { isModalOpen } = useModal();
+
+  // Check sessionStorage on component mount to determine if banner was previously closed
+  useEffect(() => {
+    const bannerClosed = sessionStorage.getItem('promotional-banner-closed');
+    if (bannerClosed === 'true') {
+      setIsVisible(false);
+    }
+  }, []);
+
+  // Function to handle closing the banner and storing the state
+  const handleClose = () => {
+    setIsVisible(false);
+    sessionStorage.setItem('promotional-banner-closed', 'true');
+  };
 
   // The banner is positioned fixed at the bottom and should overlay content.
   // No body padding adjustments are needed to avoid layout shifts when it opens/closes.
@@ -31,23 +45,23 @@ export default function PromotionalBanner() {
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between">
           {/* Main content */}
-          <div className="flex items-center space-x-4">
+          <div className="flex-1 flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
             {/* Launch badge */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider text-white/90 ring-1 ring-white/10">
+            <div className="self-start sm:self-auto bg-white/10 backdrop-blur-sm rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white/90 ring-1 ring-white/10">
               🚀 Lancement Officiel
             </div>
 
             {/* Main message */}
-            <div className="flex items-center space-x-2 text-sm sm:text-base">
+            <div className="flex flex-wrap gap-1 sm:gap-2 text-xs sm:text-sm">
               <span className="font-semibold">🎉 OFFRE EXCLUSIVE :</span>
               <span className="font-bold text-indigo-300">25% de rabais</span>
               <span>pour les 100 premiers clients !</span>
             </div>
           </div>
 
-          {/* CTA Button and flexible close button */}
+          {/* Desktop CTA and close button */}
           <div className="hidden sm:flex items-center space-x-3">
             <button
               onClick={() => {
@@ -55,12 +69,12 @@ export default function PromotionalBanner() {
                   .getElementById("contact")
                   ?.scrollIntoView({ behavior: "smooth" });
               }}
-              className="bg-white text-slate-900 px-4 py-1.5 rounded-full text-sm font-bold hover:bg-white/90 transition-colors cursor-pointer shadow-sm"
+              className="bg-white text-slate-900 px-3.5 py-1 rounded-full text-xs font-bold hover:bg-white/90 transition-colors cursor-pointer shadow-sm"
             >
               Réserver maintenant
             </button>
             <button
-              onClick={() => setIsVisible(false)}
+              onClick={handleClose}
               aria-label="Close promotional banner"
               className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors shadow-sm cursor-pointer"
             >
@@ -69,17 +83,24 @@ export default function PromotionalBanner() {
           </div>
         </div>
 
-        {/* Mobile CTA */}
-        <div className="sm:hidden mt-2 text-center">
+        {/* Mobile CTA and close button */}
+        <div className="sm:hidden flex items-center justify-between mt-3">
           <button
             onClick={() => {
               document
                 .getElementById("contact")
                 ?.scrollIntoView({ behavior: "smooth" });
             }}
-            className="bg-white text-slate-900 px-4 py-1.5 rounded-full text-sm font-bold hover:bg-white/90 transition-colors cursor-pointer shadow-sm"
+            className="flex-1 bg-white text-slate-900 px-3.5 py-1 rounded-full text-xs font-bold hover:bg-white/90 transition-colors cursor-pointer shadow-sm mr-3"
           >
             Réserver maintenant
+          </button>
+          <button
+            onClick={handleClose}
+            aria-label="Close promotional banner"
+            className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors shadow-sm cursor-pointer"
+          >
+            <X className="w-4 h-4" />
           </button>
         </div>
       </div>
