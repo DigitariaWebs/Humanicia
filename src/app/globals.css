@@ -176,3 +176,25 @@ section[id],
 button {
   cursor: pointer;
 }
+/* Line clamp utilities for better cross-browser support */
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+/* Search input focus styles using CSS variables */
+.search-input-focus:focus {
+  border-color: var(--color-cta) !important;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2) !important;
+  outline: none !important;
+}

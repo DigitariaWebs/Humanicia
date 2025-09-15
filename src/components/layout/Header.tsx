@@ -38,6 +38,7 @@ const NAV_ITEMS: NavItem[] = [
       },
     ],
   },
+  { label: "Blog", href: "/blog" },
   { label: "Agents", href: "/agent" },
   { label: "Contact", href: "/#contact" },
 ];
